@@ -3,11 +3,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Sum
-from django.db.models.functions import ExtractMonth, ExtractYear
 
 from income.models import Income
 from expenses.models import Expense, Category
 from budget.models import Budget
+
+def home_view(request):
+    """Public Landing Page / Home View."""
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    return render(request, 'home.html')
 
 @login_required
 def dashboard_view(request):
@@ -87,7 +92,6 @@ def chart_data_api(request):
     monthly_expenses_data = []
 
     for i in range(5, -1, -1):
-        # Calculate year and month i months ago
         year = today.year
         month = today.month - i
         if month <= 0:

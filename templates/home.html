@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Smart Expense Tracker & Budget Management System{% endblock %}
+
+{% block auth_content %}
+<!-- Navigation Header for Home Page -->
+<nav class="navbar navbar-expand-lg border-bottom border-secondary border-opacity-10 py-3 mb-4">
+    <div class="container px-0">
+        <a href="{% url 'home' %}" class="d-flex align-items-center text-decoration-none gap-2">
+            <div class="rounded-3 bg-indigo-glow p-2 d-flex align-items-center justify-content-center" style="width:42px; height:42px;">
+                <i class="bi bi-wallet2 text-indigo fs-4"></i>
+            </div>
+            <div>
+                <h5 class="fw-bold text-white mb-0">Smart Expense</h5>
+                <small class="text-secondary" style="font-size: 0.72rem;">Budget System</small>
+            </div>
+        </a>
+
+        <div class="d-flex align-items-center gap-2 ms-auto">
+            <a href="{% url 'login' %}" class="btn btn-outline-light px-3 py-2 rounded-3 fw-semibold small">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+            </a>
+            <a href="{% url 'register' %}" class="btn btn-primary-gradient px-3.5 py-2 rounded-3 fw-semibold small">
+                <i class="bi bi-person-plus-fill me-1"></i> Get Started
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="row align-items-center py-4 py-lg-5 g-5">
+    <div class="col-lg-6">
+        <div class="badge bg-indigo-glow text-indigo px-3 py-2 rounded-pill mb-3 fw-semibold">
+            <i class="bi bi-stars me-1"></i> Smart Financial Management Platform
+        </div>
+        <h1 class="display-4 fw-extrabold text-white mb-3 leading-tight" style="letter-spacing: -0.02em;">
+            Take Control of Your <span class="text-indigo">Personal Finances</span>
+        </h1>
+        <p class="text-secondary fs-5 mb-4 fw-normal" style="line-height: 1.6;">
+            Effortlessly track income, monitor daily expenses, set monthly budget caps with automatic warning alerts, and export financial statements.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="d-flex flex-wrap gap-3 mb-4">
+            <a href="{% url 'register' %}" class="btn btn-primary-gradient btn-lg px-4 py-3 rounded-3 fw-bold shadow-lg d-flex align-items-center gap-2">
+                Create Free Account <i class="bi bi-arrow-right fs-5"></i>
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4 py-3 rounded-3 fw-semibold d-flex align-items-center gap-2">
+                <i class="bi bi-box-arrow-in-right fs-5"></i> Login to Dashboard
+            </a>
+        </div>
+
+        <!-- Quick Demo Login Note -->
+        <div class="glass-card p-3 d-inline-flex align-items-center gap-3 border border-secondary border-opacity-25">
+            <div class="rounded-circle bg-emerald-glow p-2 d-flex align-items-center justify-content-center" style="width:36px; height:36px;">
+                <i class="bi bi-key-fill text-success"></i>
+            </div>
+            <div class="small">
+                <span class="text-secondary">Instant Demo Access:</span>
+                <span class="text-white fw-bold ms-1">demo</span> / <span class="text-white fw-bold">demo1234</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live App Interactive Preview Graphic -->
+    <div class="col-lg-6">
+        <div class="glass-card p-4 position-relative overflow-hidden shadow-2xl">
+            <div class="d-flex align-items-center justify-content-between mb-4 border-bottom border-secondary border-opacity-10 pb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="rounded-circle bg-danger d-inline-block" style="width:10px; height:10px;"></span>
+                    <span class="rounded-circle bg-warning d-inline-block" style="width:10px; height:10px;"></span>
+                    <span class="rounded-circle bg-success d-inline-block" style="width:10px; height:10px;"></span>
+                </div>
+                <small class="text-secondary fw-semibold"><i class="bi bi-shield-check text-success me-1"></i> Live Financial Preview</small>
+            </div>
+
+            <!-- Metric Cards Preview Grid -->
+            <div class="row g-3 mb-4">
+                <div class="col-6">
+                    <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-10">
+                        <small class="text-secondary d-block">Total Income</small>
+                        <h4 class="fw-bold text-success mb-0">$5,350.00</h4>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-10">
+                        <small class="text-secondary d-block">Total Expense</small>
+                        <h4 class="fw-bold text-danger mb-0">$1,690.50</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar Mock -->
+            <div class="p-3 rounded-3 bg-dark bg-opacity-40 mb-3">
+                <div class="d-flex justify-content-between text-secondary small mb-1">
+                    <span>Monthly Budget Cap</span>
+                    <span class="fw-bold text-success">67.6% Used</span>
+                </div>
+                <div class="progress progress-dark" style="height: 8px;">
+                    <div class="progress-bar bg-success" style="width: 67.6%;"></div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Mock -->
+            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-10">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-emerald-glow text-success p-2 rounded-circle"><i class="bi bi-arrow-down-left"></i></span>
+                    <div>
+                        <div class="fw-bold text-white small">Monthly Salary</div>
+                        <small class="text-secondary" style="font-size: 0.72rem;">Income • Primary</small>
+                    </div>
+                </div>
+                <span class="fw-bold text-success small">+$4,500.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="py-5 my-4 border-top border-secondary border-opacity-10">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-white mb-2">Everything You Need for Financial Clarity</h2>
+        <p class="text-secondary col-md-8 mx-auto">Designed to help students, freshers, and professionals stay on top of their budgets.</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Feature 1 -->
+        <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+                <div class="icon-badge bg-indigo-glow mb-3">
+                    <i class="bi bi-pie-chart-fill"></i>
+                </div>
+                <h5 class="fw-bold text-white mb-2">Dynamic Charts</h5>
+                <p class="text-secondary small mb-0">Interactive Chart.js visualizations for income vs expense, category doughnut distributions, and 6-month spending trends.</p>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+                <div class="icon-badge bg-rose-glow mb-3">
+                    <i class="bi bi-bell-fill text-danger"></i>
+                </div>
+                <h5 class="fw-bold text-white mb-2">Budget Warnings</h5>
+                <p class="text-secondary small mb-0">Set monthly spending limits for overall budget and specific categories with visual warnings when limits are exceeded.</p>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+                <div class="icon-badge bg-emerald-glow mb-3">
+                    <i class="bi bi-sliders"></i>
+                </div>
+                <h5 class="fw-bold text-white mb-2">Search & Filters</h5>
+                <p class="text-secondary small mb-0">Instant search by title or description, category filter, date range filter, and sorting by date or amount.</p>
+            </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+                <div class="icon-badge bg-amber-glow mb-3">
+                    <i class="bi bi-file-earmark-pdf-fill text-warning"></i>
+                </div>
+                <h5 class="fw-bold text-white mb-2">PDF & CSV Reports</h5>
+                <p class="text-secondary small mb-0">Generate daily, weekly, monthly, or yearly financial statements and export to clean CSV files or styled ReportLab PDFs.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works -->
+<div class="py-5 mb-4">
+    <div class="glass-card p-4 p-md-5">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold text-white mb-2">How It Works in 3 Easy Steps</h3>
+            <p class="text-secondary">Get started in under 1 minute</p>
+        </div>
+
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="rounded-circle bg-indigo-glow mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 54px; height: 54px;">
+                    <span class="fw-bold fs-4 text-indigo">1</span>
+                </div>
+                <h5 class="fw-bold text-white mb-2">Create an Account</h5>
+                <p class="text-secondary small">Register for free or log in with the instant demo user.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="rounded-circle bg-emerald-glow mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 54px; height: 54px;">
+                    <span class="fw-bold fs-4 text-success">2</span>
+                </div>
+                <h5 class="fw-bold text-white mb-2">Add Income & Expenses</h5>
+                <p class="text-secondary small">Record transaction details, select categories, and set monthly spending caps.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="rounded-circle bg-amber-glow mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 54px; height: 54px;">
+                    <span class="fw-bold fs-4 text-warning">3</span>
+                </div>
+                <h5 class="fw-bold text-white mb-2">Analyze & Export</h5>
+                <p class="text-secondary small">Review interactive charts on your dashboard and download PDF statements.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom CTA Banner -->
+<div class="text-center py-5 glass-card p-4 mb-4">
+    <h3 class="fw-bold text-white mb-3">Ready to Track Your Finances Like a Pro?</h3>
+    <p class="text-secondary mb-4">Join today and start managing your income, expenses, and budgets effortlessly.</p>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'register' %}" class="btn btn-primary-gradient px-4 py-2.5 rounded-3 fw-bold">Register Account</a>
+        <a href="{% url 'login' %}" class="btn btn-outline-light px-4 py-2.5 rounded-3 fw-semibold">Sign In</a>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-secondary py-4 border-top border-secondary border-opacity-10 small">
+    <p class="mb-0">© 2026 Smart Expense Tracker & Budget Management System. All rights reserved.</p>
+</footer>
+{% endblock %}
