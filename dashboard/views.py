@@ -9,9 +9,7 @@ from expenses.models import Expense, Category
 from budget.models import Budget
 
 def home_view(request):
-    """Public Landing Page / Home View."""
-    if request.user.is_authenticated:
-        return redirect('dashboard')
+    """Landing Page / Home View accessible to all users."""
     return render(request, 'home.html')
 
 @login_required
