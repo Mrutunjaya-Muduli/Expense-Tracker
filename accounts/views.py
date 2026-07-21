@@ -8,7 +8,7 @@ from expenses.utils import ensure_default_categories
 
 def register_view(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('home')
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -25,7 +25,7 @@ def register_view(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('home')
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -43,7 +43,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.info(request, "You have been logged out successfully.")
-    return redirect('login')
+    return redirect('home')
 
 @login_required
 def profile_view(request):
