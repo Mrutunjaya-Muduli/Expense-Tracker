@@ -17,9 +17,9 @@
             </div>
         </a>
 
-        <div class="d-flex align-items-center gap-2.5 ms-auto">
+        <div class="d-flex align-items-center gap-3.5 ms-auto">
             {% if request.user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="btn btn-sm btn-primary-gradient px-3 py-1.5 rounded-3 fw-semibold small d-flex align-items-center gap-1.5">
+                <a href="{% url 'dashboard' %}" class="btn btn-sm btn-primary-gradient px-3 py-1.5 rounded-3 fw-semibold small d-flex align-items-center gap-1.5 me-2">
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
                 
@@ -43,10 +43,10 @@
                     </ul>
                 </div>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-light px-3 py-1.5 rounded-3 fw-semibold small">
+                <a href="{% url 'login' %}" class="btn btn-outline-light px-3.5 py-1.5 rounded-3 fw-semibold small">
                     <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
                 </a>
-                <a href="{% url 'register' %}" class="btn btn-primary-gradient px-3.5 py-1.5 rounded-3 fw-semibold small">
+                <a href="{% url 'register' %}" class="btn btn-primary-gradient px-4 py-1.5 rounded-3 fw-semibold small ms-2">
                     <i class="bi bi-person-plus-fill me-1"></i> Get Started
                 </a>
             {% endif %}
@@ -244,7 +244,7 @@
 <div class="text-center py-5 glass-card p-4 mb-4">
     <h3 class="fw-bold text-white mb-3">Ready to Track Your Finances Like a Pro?</h3>
     <p class="text-secondary mb-4">Join today and start managing your income, expenses, and budgets effortlessly.</p>
-    <div class="d-flex justify-content-center gap-3">
+    <div class="d-flex justify-content-center gap-4">
         <a href="{% url 'register' %}" class="btn btn-primary-gradient px-4 py-2.5 rounded-3 fw-bold">Register Account</a>
         <a href="{% url 'login' %}" class="btn btn-outline-light px-4 py-2.5 rounded-3 fw-semibold">Sign In</a>
     </div>
