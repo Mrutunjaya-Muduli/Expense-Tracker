@@ -97,14 +97,22 @@ h1, h2, h3, h4, h5, h6, .fw-bold, .fw-extrabold, .display-4, .stat-card h3, .btn
     transition: margin-left 0.3s ease;
 }
 
-/* Fixed/Sticky Glassmorphism Top Navbar */
+/* Fixed/Sticky Floating Glassmorphism Top Navbar */
 .navbar-glass {
     position: sticky;
-    top: 0;
+    top: 0.75rem;
     z-index: 1030;
     background: rgba(15, 23, 42, 0.85) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    border-radius: 1rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 991.98px) {
