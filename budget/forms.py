@@ -1,5 +1,6 @@
 import datetime
 from django import forms
+from django.db import models
 from .models import Budget
 from expenses.models import Category
 

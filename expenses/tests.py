@@ -2,8 +2,7 @@ import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
 from .models import Category, Expense
-from income.models import Income
-from budget.models import Budget
+from .forms import ExpenseForm
 
 class ExpenseModelTest(TestCase):
     def setUp(self):
@@ -21,3 +20,7 @@ class ExpenseModelTest(TestCase):
         )
         self.assertEqual(exp.amount, 25.50)
         self.assertEqual(exp.user.username, 'testuser')
+
+    def test_expense_form_initialization(self):
+        form = ExpenseForm(user=self.user)
+        self.assertIn(self.category, form.fields['category'].queryset)
