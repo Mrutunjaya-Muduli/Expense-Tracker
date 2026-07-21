@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from expenses.utils import ensure_default_categories
 
+@never_cache
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -23,6 +25,7 @@ def register_view(request):
         form = UserRegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
 
+@never_cache
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
