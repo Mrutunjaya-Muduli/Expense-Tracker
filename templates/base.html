@@ -21,29 +21,31 @@
 <body>
     {% if user.is_authenticated %}
         {% include 'sidebar.html' %}
-        <main class="main-content">
+        <main class="main-content pt-0 px-0">
             {% include 'navbar.html' %}
 
-            <!-- System Messages & Notifications -->
-            {% if messages %}
-                <div class="row mb-3">
-                    <div class="col-12">
-                        {% for message in messages %}
-                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show glass-card border-0 text-white" role="alert">
-                                <i class="bi {% if message.tags == 'success' %}bi-check-circle-fill text-success{% elif message.tags == 'error' %}bi-exclamation-triangle-fill text-danger{% else %}bi-info-circle-fill text-info{% endif %} me-2 fs-5"></i>
-                                {{ message }}
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        {% endfor %}
+            <div class="px-3 px-md-4 pb-4">
+                <!-- System Messages & Notifications -->
+                {% if messages %}
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show glass-card border-0 text-white" role="alert">
+                                    <i class="bi {% if message.tags == 'success' %}bi-check-circle-fill text-success{% elif message.tags == 'error' %}bi-exclamation-triangle-fill text-danger{% else %}bi-info-circle-fill text-info{% endif %} me-2 fs-5"></i>
+                                    {{ message }}
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-            {% endif %}
+                {% endif %}
 
-            {% block content %}{% endblock %}
+                {% block content %}{% endblock %}
+            </div>
         </main>
     {% else %}
-        <div class="container py-5">
-            {% if messages %}
+        {% if messages %}
+            <div class="container pt-3">
                 <div class="row justify-content-center mb-3">
                     <div class="col-md-6">
                         {% for message in messages %}
@@ -54,10 +56,10 @@
                         {% endfor %}
                     </div>
                 </div>
-            {% endif %}
+            </div>
+        {% endif %}
 
-            {% block auth_content %}{% endblock %}
-        </div>
+        {% block auth_content %}{% endblock %}
     {% endif %}
 
     <!-- Bootstrap 5 JS Bundle -->
