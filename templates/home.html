@@ -4,58 +4,58 @@
 {% block title %}Smart Expense Tracker & Budget Management System{% endblock %}
 
 {% block auth_content %}
-<!-- Navigation Header for Home Page (Full 100% Device Width & Standard Height) -->
-<nav class="navbar navbar-expand-lg py-2 mb-4 sticky-top navbar-glass">
+<!-- World-Class Glass Navigation Header for Home Page -->
+<nav class="navbar navbar-expand-lg sticky-top navbar-glass">
     <div class="container-fluid px-3 px-md-4">
-        <a href="{% url 'home' %}" class="d-flex align-items-center text-decoration-none gap-2 me-3">
-            <div class="rounded-3 bg-indigo-glow p-1.5 d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
-                <i class="bi bi-wallet2 text-indigo fs-5"></i>
+        <a href="{% url 'home' %}" class="d-flex align-items-center text-decoration-none gap-2.5 me-3">
+            <div class="brand-icon">
+                <i class="bi bi-wallet2 text-white fs-5"></i>
             </div>
             <div>
-                <h6 class="fw-bold text-white mb-0">Smart Expense</h6>
-                <small class="text-secondary" style="font-size: 0.7rem;">Budget System</small>
+                <h5 class="fw-bold text-white mb-0" style="letter-spacing: -0.02em;">Smart <span class="text-indigo">Expense</span></h5>
+                <small class="text-secondary d-block" style="font-size: 0.68rem; line-height: 1;">Budget System</small>
             </div>
         </a>
 
-        <!-- Section Navigation Links with Icons -->
+        <!-- Section Navigation Links with Icons (Glass Capsule) -->
         {% if request.user.is_authenticated %}
-            <div class="d-none d-lg-flex align-items-center gap-1 mx-auto bg-dark bg-opacity-60 px-2.5 py-1 rounded-pill border border-secondary border-opacity-10 shadow-sm" style="max-width: fit-content;">
-                <a href="{% url 'dashboard' %}" class="btn btn-sm btn-link text-secondary text-decoration-none px-2.5 py-1 rounded-pill small">
-                    <i class="bi bi-speedometer2 me-1 text-indigo"></i> Dashboard
+            <div class="d-none d-lg-flex align-items-center nav-capsule mx-auto">
+                <a href="{% url 'dashboard' %}" class="nav-pill-link">
+                    <i class="bi bi-speedometer2 text-indigo"></i> Dashboard
                 </a>
-                <a href="{% url 'income_list' %}" class="btn btn-sm btn-link text-secondary text-decoration-none px-2.5 py-1 rounded-pill small">
-                    <i class="bi bi-arrow-down-left-circle me-1 text-success"></i> Income
+                <a href="{% url 'income_list' %}" class="nav-pill-link">
+                    <i class="bi bi-arrow-down-left-circle text-success"></i> Income
                 </a>
-                <a href="{% url 'expense_list' %}" class="btn btn-sm btn-link text-secondary text-decoration-none px-2.5 py-1 rounded-pill small">
-                    <i class="bi bi-arrow-up-right-circle me-1 text-danger"></i> Expenses
+                <a href="{% url 'expense_list' %}" class="nav-pill-link">
+                    <i class="bi bi-arrow-up-right-circle text-danger"></i> Expenses
                 </a>
-                <a href="{% url 'budget_list' %}" class="btn btn-sm btn-link text-secondary text-decoration-none px-2.5 py-1 rounded-pill small">
-                    <i class="bi bi-pie-chart me-1 text-warning"></i> Budget
+                <a href="{% url 'budget_list' %}" class="nav-pill-link">
+                    <i class="bi bi-pie-chart text-warning"></i> Budget
                 </a>
-                <a href="{% url 'reports' %}" class="btn btn-sm btn-link text-secondary text-decoration-none px-2.5 py-1 rounded-pill small">
-                    <i class="bi bi-file-earmark-bar-graph me-1 text-cyan"></i> Reports
+                <a href="{% url 'reports' %}" class="nav-pill-link">
+                    <i class="bi bi-file-earmark-bar-graph text-cyan"></i> Reports
                 </a>
             </div>
         {% endif %}
 
-        <div class="d-flex align-items-center gap-2 ms-auto">
+        <div class="d-flex align-items-center gap-2.5 ms-auto">
             {% if request.user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="btn btn-sm btn-primary-gradient px-3 py-1.5 rounded-3 fw-semibold small d-none d-sm-inline-flex align-items-center gap-1">
-                    <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                <a href="{% url 'dashboard' %}" class="btn btn-sm btn-primary-gradient px-3 py-1.5 rounded-3 fw-semibold d-none d-sm-inline-flex align-items-center gap-1.5">
+                    <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
-                <!-- User Profile Avatar & Dropdown -->
+                <!-- User Profile Capsule Dropdown -->
                 <div class="dropdown ms-1">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle gap-2" id="homeUserDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle gap-2 user-capsule" id="homeUserDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         {% if user.profile.avatar %}
-                            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="avatar-img" style="width:38px; height:38px;">
+                            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="avatar-img" style="width:34px; height:34px;">
                         {% else %}
-                            <div class="avatar-img bg-indigo-glow d-flex align-items-center justify-content-center fw-bold" style="width:38px; height:38px; font-size: 0.9rem;">
+                            <div class="avatar-img bg-indigo-glow d-flex align-items-center justify-content-center fw-bold" style="width:34px; height:34px; font-size: 0.85rem;">
                                 {{ user.username|first|upper }}
                             </div>
                         {% endif %}
-                        <span class="d-none d-md-inline fw-semibold small">{{ user.username }}</span>
+                        <span class="d-none d-md-inline fw-semibold small pe-1">{{ user.username }}</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-secondary border-opacity-25" aria-labelledby="homeUserDropdown">
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg border-secondary border-opacity-25" aria-labelledby="homeUserDropdown">
                         <li><a class="dropdown-item py-2" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2 me-2 text-indigo"></i> Dashboard</a></li>
                         <li><a class="dropdown-item py-2" href="{% url 'profile' %}"><i class="bi bi-person me-2 text-info"></i> Profile & Settings</a></li>
                         <li><hr class="dropdown-divider border-secondary border-opacity-25"></li>
@@ -63,10 +63,10 @@
                     </ul>
                 </div>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-light px-2.5 py-1 rounded-3 fw-semibold small" style="font-size: 0.8rem;">
+                <a href="{% url 'login' %}" class="btn btn-outline-light px-3 py-1.5 rounded-3 fw-semibold small">
                     <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
                 </a>
-                <a href="{% url 'register' %}" class="btn btn-primary-gradient px-3 py-1 rounded-3 fw-semibold small" style="font-size: 0.8rem;">
+                <a href="{% url 'register' %}" class="btn btn-primary-gradient px-3.5 py-1.5 rounded-3 fw-semibold small">
                     <i class="bi bi-person-plus-fill me-1"></i> Get Started
                 </a>
             {% endif %}

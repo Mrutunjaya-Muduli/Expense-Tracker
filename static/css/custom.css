@@ -97,7 +97,7 @@ h1, h2, h3, h4, h5, h6, .fw-bold, .fw-extrabold, .display-4, .stat-card h3, .btn
     transition: margin-left 0.3s ease;
 }
 
-/* Fixed/Sticky Top Navbar Settle Design (Full Device Width & Balanced Height) */
+/* World-Class Modern Glass Top Navbar */
 .navbar-glass {
     position: sticky;
     top: 0;
@@ -106,19 +106,71 @@ h1, h2, h3, h4, h5, h6, .fw-bold, .fw-extrabold, .display-4, .stat-card h3, .btn
     z-index: 1030;
     width: 100% !important;
     max-width: 100% !important;
-    background: rgba(15, 23, 42, 0.95) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border-color) !important;
-    border-top: none !important;
-    border-left: none !important;
-    border-right: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    padding-top: 0.65rem !important;
-    padding-bottom: 0.65rem !important;
-    min-height: 60px;
+    background: rgba(15, 23, 42, 0.82) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25) !important;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    transition: all 0.3s ease;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-capsule {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50rem;
+    padding: 3px 6px;
+    backdrop-filter: blur(10px);
+}
+
+.nav-pill-link {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.4rem 0.85rem;
+    border-radius: 50rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.nav-pill-link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-pill-link.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(79, 70, 229, 0.3) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    font-weight: 600;
+}
+
+.user-capsule {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50rem;
+    padding: 3px 10px 3px 4px;
+    transition: all 0.2s ease;
+}
+
+.user-capsule:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(99, 102, 241, 0.4);
 }
 
 @media (max-width: 991.98px) {
