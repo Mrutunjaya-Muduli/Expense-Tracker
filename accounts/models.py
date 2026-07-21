@@ -7,7 +7,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     avatar = models.ImageField(upload_to='avatars/', default='avatars/default.png', blank=True)
     phone = models.CharField(max_length=20, blank=True, default='')
-    currency = models.CharField(max_length=10, default='$')
+    currency = models.CharField(max_length=10, default='₹')
 
     def __str__(self):
         return f"{self.user.username}'s Profile"

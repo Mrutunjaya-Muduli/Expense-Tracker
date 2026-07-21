@@ -35,6 +35,6 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['avatar', 'phone', 'currency']
         widgets = {
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'currency': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '$ or ₹ or €'}),
+            'currency': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '₹ or $ or €'}),
             'avatar': forms.FileInput(attrs={'class': 'form-control'}),
         }

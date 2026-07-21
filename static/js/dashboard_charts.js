@@ -20,7 +20,7 @@ function renderIncomeVsExpenseChart(chartData) {
         data: {
             labels: chartData.labels,
             datasets: [{
-                label: "Amount ($)",
+                label: "Amount (₹)",
                 data: chartData.data,
                 backgroundColor: ["rgba(16, 185, 129, 0.8)", "rgba(244, 63, 94, 0.8)"],
                 borderColor: ["#10b981", "#f43f5e"],
@@ -93,7 +93,7 @@ function renderMonthlyTrendChart(chartData) {
             labels: chartData.labels,
             datasets: [
                 {
-                    label: "Income ($)",
+                    label: "Income (₹)",
                     data: chartData.income,
                     borderColor: "#10b981",
                     backgroundColor: "rgba(16, 185, 129, 0.1)",
@@ -102,7 +102,7 @@ function renderMonthlyTrendChart(chartData) {
                     pointRadius: 4
                 },
                 {
-                    label: "Expenses ($)",
+                    label: "Expenses (₹)",
                     data: chartData.expenses,
                     borderColor: "#f43f5e",
                     backgroundColor: "rgba(244, 63, 94, 0.1)",
