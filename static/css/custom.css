@@ -97,7 +97,7 @@ h1, h2, h3, h4, h5, h6, .fw-bold, .fw-extrabold, .display-4, .stat-card h3, .btn
     transition: margin-left 0.3s ease;
 }
 
-/* Fixed/Sticky Top Navbar Settle Design (Full Device Width & Ultra Slim Height) */
+/* Fixed/Sticky Top Navbar Settle Design (Full Device Width & Balanced Height) */
 .navbar-glass {
     position: sticky;
     top: 0;
@@ -116,9 +116,9 @@ h1, h2, h3, h4, h5, h6, .fw-bold, .fw-extrabold, .display-4, .stat-card h3, .btn
     border-radius: 0 !important;
     box-shadow: none !important;
     margin: 0 !important;
-    padding-top: 0.25rem !important;
-    padding-bottom: 0.25rem !important;
-    min-height: 44px;
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.65rem !important;
+    min-height: 60px;
 }
 
 @media (max-width: 991.98px) {
