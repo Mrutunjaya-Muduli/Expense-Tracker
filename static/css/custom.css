@@ -97,12 +97,13 @@ h1, h2, h3, h4, h5, h6, .fw-bold, .fw-extrabold, .display-4, .stat-card h3, .btn
     transition: margin-left 0.3s ease;
 }
 
-/* Fixed/Sticky Top Navbar Settle Design */
+/* Fixed/Sticky Top Navbar Settle Design (Full Width & Slim Height) */
 .navbar-glass {
     position: sticky;
     top: 0;
     z-index: 1030;
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
     background: rgba(15, 23, 42, 0.95) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -113,6 +114,8 @@ h1, h2, h3, h4, h5, h6, .fw-bold, .fw-extrabold, .display-4, .stat-card h3, .btn
     border-radius: 0 !important;
     box-shadow: none !important;
     margin: 0 !important;
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
 }
 
 @media (max-width: 991.98px) {
