@@ -1,0 +1,71 @@
+<aside class="sidebar p-3" id="sidebar">
+    <div class="d-flex align-items-center justify-content-between mb-4 px-3 pt-2">
+        <a href="{% url 'dashboard' %}" class="d-flex align-items-center text-decoration-none gap-2">
+            <div class="rounded-3 bg-indigo-glow p-2 d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                <i class="bi bi-wallet2 text-indigo fs-4"></i>
+            </div>
+            <div>
+                <h5 class="fw-bold text-white mb-0">Smart Expense</h5>
+                <small class="text-secondary" style="font-size: 0.72rem;">Budget System</small>
+            </div>
+        </a>
+    </div>
+
+    <hr class="border-secondary opacity-25 my-3">
+
+    <ul class="nav flex-column mb-auto">
+        <li class="nav-item">
+            <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'income_list' %}" class="nav-link {% if 'income' in request.path %}active{% endif %}">
+                <i class="bi bi-arrow-down-left-circle"></i>
+                <span>Income</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'expense_list' %}" class="nav-link {% if 'expense' in request.path and 'category' not in request.path %}active{% endif %}">
+                <i class="bi bi-arrow-up-right-circle"></i>
+                <span>Expenses</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'category_list' %}" class="nav-link {% if 'categories' in request.path %}active{% endif %}">
+                <i class="bi bi-tags"></i>
+                <span>Categories</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'budget_list' %}" class="nav-link {% if 'budget' in request.path %}active{% endif %}">
+                <i class="bi bi-pie-chart"></i>
+                <span>Budget</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'reports' %}" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
+                <i class="bi bi-file-earmark-bar-graph"></i>
+                <span>Reports</span>
+            </a>
+        </li>
+    </ul>
+
+    <hr class="border-secondary opacity-25 my-3">
+
+    <ul class="nav flex-column mb-3">
+        <li class="nav-item">
+            <a href="{% url 'profile' %}" class="nav-link {% if 'profile' in request.path %}active{% endif %}">
+                <i class="bi bi-person-circle"></i>
+                <span>Profile Settings</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'logout' %}" class="nav-link text-danger">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+</aside>

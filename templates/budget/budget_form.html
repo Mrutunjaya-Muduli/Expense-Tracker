@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Smart Expense Tracker{% endblock %}
+
+{% block header_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+        <div class="glass-card p-4 p-md-5">
+            <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom border-secondary border-opacity-10">
+                <h4 class="fw-bold text-white mb-0"><i class="bi bi-pie-chart text-indigo me-2"></i> {{ title }}</h4>
+                <a href="{% url 'budget_list' %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x-lg"></i></a>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label text-secondary small fw-semibold">Target Month</label>
+                    {{ form.month }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-secondary small fw-semibold">Total Budget Cap ($)</label>
+                    {{ form.total_budget }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-secondary small fw-semibold">Specific Category (Optional)</label>
+                    {{ form.category }}
+                    <small class="text-secondary d-block mt-1">Leave blank to apply as overall monthly budget cap.</small>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'budget_list' %}" class="btn btn-outline-secondary px-4">Cancel</a>
+                    <button type="submit" class="btn btn-primary-gradient px-4 fw-semibold">
+                        <i class="bi bi-check2 me-1"></i> Save Budget
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

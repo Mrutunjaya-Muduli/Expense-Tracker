@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Budget Management - Smart Expense Tracker{% endblock %}
+
+{% block header_title %}Budget & Spending Limits{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+        <h4 class="fw-bold text-white mb-1">Budget Tracker & Limits</h4>
+        <p class="text-secondary small mb-0">Control spending thresholds and prevent over-budget situations</p>
+    </div>
+    <div class="d-flex gap-2">
+        <form method="GET" class="d-flex align-items-center me-2">
+            <input type="month" name="month" class="form-control form-control-sm me-2" value="{{ selected_month }}" onchange="this.form.submit()">
+        </form>
+        <a href="{% url 'budget_set' %}" class="btn btn-primary-gradient px-4 py-2 rounded-3 fw-semibold">
+            <i class="bi bi-plus-lg me-1"></i> Set New Budget Cap
+        </a>
+    </div>
+</div>
+
+<!-- Overall Budget Warning Alert -->
+{% if is_overall_over_budget %}
+    <div class="alert alert-danger glass-card border-danger border-opacity-50 text-white p-3 mb-4 d-flex align-items-center gap-3">
+        <div class="rounded-circle bg-danger bg-opacity-25 p-2 d-flex align-items-center justify-content-center">
+            <i class="bi bi-exclamation-triangle-fill text-danger fs-3"></i>
+        </div>
+        <div>
+            <h5 class="fw-bold mb-1 text-danger">Monthly Budget Warning Exceeded!</h5>
+            <p class="mb-0 small">You have spent <strong>{{ currency_symbol }}{{ total_monthly_expenses|floatformat:2 }}</strong>, exceeding your overall monthly budget limit of <strong>{{ currency_symbol }}{{ overall_budget|floatformat:2 }}</strong> by <strong>{{ currency_symbol }}{{ total_monthly_expenses|add:overall_budget|floatformat:2 }}</strong>.</p>
+        </div>
+    </div>
+{% endif %}
+
+<!-- Overall Budget Card -->
+<div class="glass-card p-4 mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="icon-badge bg-indigo-glow">
+                <i class="bi bi-pie-chart-fill"></i>
+            </div>
+            <div>
+                <h5 class="fw-bold text-white mb-0">Overall Budget ({{ selected_month }})</h5>
+                <small class="text-secondary">Overall spending cap for the entire month</small>
+            </div>
+        </div>
+        {% if overall_budget_obj %}
+            <div>
+                <a href="{% url 'budget_edit' overall_budget_obj.id %}" class="btn btn-sm btn-outline-info me-1"><i class="bi bi-pencil"></i> Edit</a>
+                <a href="{% url 'budget_delete' overall_budget_obj.id %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if overall_budget > 0 %}
+        <div class="row g-3 mb-3 text-center">
+            <div class="col-4">
+                <small class="text-secondary d-block fw-semibold">Monthly Limit</small>
+                <span class="fs-4 fw-bold text-white">{{ currency_symbol }}{{ overall_budget|floatformat:2 }}</span>
+            </div>
+            <div class="col-4">
+                <small class="text-secondary d-block fw-semibold">Spent So Far</small>
+                <span class="fs-4 fw-bold text-danger">{{ currency_symbol }}{{ total_monthly_expenses|floatformat:2 }}</span>
+            </div>
+            <div class="col-4">
+                <small class="text-secondary d-block fw-semibold">Remaining</small>
+                <span class="fs-4 fw-bold {% if overall_remaining < 0 %}text-danger{% else %}text-success{% endif %}">
+                    {{ currency_symbol }}{{ overall_remaining|floatformat:2 }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-2">
+            <div class="d-flex justify-content-between text-secondary small mb-1">
+                <span>Budget Usage</span>
+                <span class="fw-bold {% if is_overall_over_budget %}text-danger{% elif overall_percentage > 80 %}text-warning{% else %}text-success{% endif %}">{{ overall_percentage }}%</span>
+            </div>
+            <div class="progress progress-dark" style="height: 12px;">
+                <div class="progress-bar {% if is_overall_over_budget %}bg-danger{% elif overall_percentage > 80 %}bg-warning{% else %}bg-success{% endif %}" role="progressbar" style="width: {{ overall_percentage }}%;" aria-valuenow="{{ overall_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-4 text-secondary">
+            <p class="mb-2">No overall budget set for {{ selected_month }}.</p>
+            <a href="{% url 'budget_set' %}?month={{ selected_month }}" class="btn btn-sm btn-primary-gradient">Set Monthly Budget Now</a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Category Budgets Section -->
+<h5 class="fw-bold text-white mb-3"><i class="bi bi-tags text-indigo me-2"></i> Category Budgets ({{ selected_month }})</h5>
+<div class="row g-3">
+    {% for cb in category_progress_list %}
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-3">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge p-2 rounded-2" style="background-color: {{ cb.category.color }}20; color: {{ cb.category.color }}; border: 1px solid {{ cb.category.color }}40;">
+                            <i class="bi {{ cb.category.icon }} fs-5"></i>
+                        </span>
+                        <h6 class="fw-bold text-white mb-0">{{ cb.category.category_name }}</h6>
+                    </div>
+                    <div>
+                        <a href="{% url 'budget_edit' cb.budget_id %}" class="btn btn-sm btn-link text-info p-0 me-1" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a href="{% url 'budget_delete' cb.budget_id %}" class="btn btn-sm btn-link text-danger p-0" title="Delete"><i class="bi bi-trash"></i></a>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between small text-secondary mb-1">
+                    <span>Spent: <strong class="text-white">{{ currency_symbol }}{{ cb.spent|floatformat:2 }}</strong></span>
+                    <span>Budget: <strong class="text-white">{{ currency_symbol }}{{ cb.total_budget|floatformat:2 }}</strong></span>
+                </div>
+
+                <div class="progress progress-dark mb-2" style="height: 8px;">
+                    <div class="progress-bar {% if cb.is_over %}bg-danger{% elif cb.percentage > 80 %}bg-warning{% else %}bg-success{% endif %}" role="progressbar" style="width: {{ cb.percentage }}%;"></div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center small">
+                    {% if cb.is_over %}
+                        <span class="badge bg-danger text-white">Exceeded by {{ currency_symbol }}{{ cb.spent|add:cb.total_budget|floatformat:2 }}</span>
+                    {% else %}
+                        <span class="text-secondary">{{ currency_symbol }}{{ cb.remaining|floatformat:2 }} left</span>
+                    {% endif %}
+                    <span class="fw-semibold {% if cb.is_over %}text-danger{% else %}text-secondary{% endif %}">{{ cb.percentage }}%</span>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="glass-card p-4 text-center text-secondary">
+                <i class="bi bi-sliders fs-2 text-muted d-block mb-2"></i>
+                No category-specific budget limits defined for {{ selected_month }}.
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

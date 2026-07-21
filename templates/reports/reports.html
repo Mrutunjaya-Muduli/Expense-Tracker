@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Financial Reports - Smart Expense Tracker{% endblock %}
+
+{% block header_title %}Reports & Analytics{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+        <h4 class="fw-bold text-white mb-1">Financial Statements & Reports</h4>
+        <p class="text-secondary small mb-0">Generate detailed periodic summaries and export statements to CSV / PDF</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'export_csv' %}?period={{ period }}" class="btn btn-outline-success px-3 py-2 rounded-3 fw-semibold">
+            <i class="bi bi-filetype-csv me-1"></i> Export CSV
+        </a>
+        <a href="{% url 'export_pdf' %}?period={{ period }}" class="btn btn-primary-gradient px-3 py-2 rounded-3 fw-semibold">
+            <i class="bi bi-file-earmark-pdf-fill me-1"></i> Download PDF Statement
+        </a>
+    </div>
+</div>
+
+<!-- Period Filter Pills -->
+<div class="glass-card p-2 mb-4 d-inline-flex gap-1">
+    <a href="?period=daily" class="btn btn-sm {% if period == 'daily' %}btn-primary-gradient{% else %}btn-outline-secondary border-0 text-secondary{% endif %} px-3 rounded-3">Daily</a>
+    <a href="?period=weekly" class="btn btn-sm {% if period == 'weekly' %}btn-primary-gradient{% else %}btn-outline-secondary border-0 text-secondary{% endif %} px-3 rounded-3">Weekly</a>
+    <a href="?period=monthly" class="btn btn-sm {% if period == 'monthly' %}btn-primary-gradient{% else %}btn-outline-secondary border-0 text-secondary{% endif %} px-3 rounded-3">Monthly</a>
+    <a href="?period=yearly" class="btn btn-sm {% if period == 'yearly' %}btn-primary-gradient{% else %}btn-outline-secondary border-0 text-secondary{% endif %} px-3 rounded-3">Yearly</a>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="glass-card stat-card d-flex align-items-center gap-3">
+            <div class="icon-badge bg-emerald-glow">
+                <i class="bi bi-arrow-down-left-circle-fill"></i>
+            </div>
+            <div>
+                <small class="text-secondary fw-semibold">Total Income ({{ period|title }})</small>
+                <h3 class="fw-bold text-success mb-0">{{ currency_symbol }}{{ total_income|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card stat-card d-flex align-items-center gap-3">
+            <div class="icon-badge bg-rose-glow">
+                <i class="bi bi-arrow-up-right-circle-fill"></i>
+            </div>
+            <div>
+                <small class="text-secondary fw-semibold">Total Expenses ({{ period|title }})</small>
+                <h3 class="fw-bold text-danger mb-0">{{ currency_symbol }}{{ total_expense|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card stat-card d-flex align-items-center gap-3">
+            <div class="icon-badge bg-indigo-glow">
+                <i class="bi bi-wallet2"></i>
+            </div>
+            <div>
+                <small class="text-secondary fw-semibold">Net Savings / Surplus</small>
+                <h3 class="fw-bold {% if net_savings >= 0 %}text-info{% else %}text-danger{% endif %} mb-0">{{ currency_symbol }}{{ net_savings|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Category Breakdown Summary -->
+    <div class="col-lg-5">
+        <div class="glass-card p-4 h-100">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-pie-chart text-indigo me-2"></i> Category Expense Summary</h5>
+            <div class="list-group list-group-flush bg-transparent">
+                {% for cat in cat_summary %}
+                    <div class="list-group-item bg-transparent border-secondary border-opacity-10 text-white px-0 py-2 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: {{ cat.category__color|default:'#6c757d' }};"></span>
+                            <span class="fw-semibold">{{ cat.category__category_name|default:"Uncategorized" }}</span>
+                        </div>
+                        <span class="fw-bold text-danger">{{ currency_symbol }}{{ cat.total|floatformat:2 }}</span>
+                    </div>
+                {% empty %}
+                    <p class="text-secondary py-3 text-center mb-0">No category breakdown available for this period.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Expenses Table -->
+    <div class="col-lg-7">
+        <div class="glass-card p-4 h-100">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-receipt text-danger me-2"></i> Expense Breakdown</h5>
+            <div class="table-responsive" style="max-height: 350px;">
+                <table class="table custom-table mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exp in expenses %}
+                            <tr>
+                                <td class="text-secondary small">{{ exp.date|date:"M d" }}</td>
+                                <td class="fw-bold text-white">{{ exp.title }}</td>
+                                <td><small class="text-secondary">{{ exp.category.category_name|default:"Uncategorized" }}</small></td>
+                                <td class="fw-bold text-danger">-{{ currency_symbol }}{{ exp.amount|floatformat:2 }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-secondary py-4">No expense records found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

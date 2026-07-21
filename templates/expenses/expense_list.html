@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Expenses - Smart Expense Tracker{% endblock %}
+
+{% block header_title %}Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+        <h4 class="fw-bold text-white mb-1">Expenses & Outflow</h4>
+        <p class="text-secondary small mb-0">Monitor, search, and analyze your daily spending</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'category_list' %}" class="btn btn-outline-secondary px-3 py-2 rounded-3 fw-semibold">
+            <i class="bi bi-tags me-1"></i> Manage Categories
+        </a>
+        <a href="{% url 'expense_add' %}" class="btn btn-primary-gradient px-4 py-2 rounded-3 fw-semibold">
+            <i class="bi bi-plus-lg me-1"></i> Add Expense
+        </a>
+    </div>
+</div>
+
+<!-- Summary Card -->
+<div class="row mb-4">
+    <div class="col-md-6 col-lg-4">
+        <div class="glass-card stat-card d-flex align-items-center gap-3">
+            <div class="icon-badge bg-rose-glow">
+                <i class="bi bi-credit-card-fill"></i>
+            </div>
+            <div>
+                <small class="text-secondary fw-semibold">Total Filtered Expense</small>
+                <h3 class="fw-bold text-danger mb-0">{{ currency_symbol }}{{ total_expense|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="glass-card p-3 mb-4">
+    <form method="GET" class="row g-2 align-items-center">
+        <div class="col-md-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-dark border-secondary border-opacity-25 text-secondary"><i class="bi bi-search"></i></span>
+                <input type="text" name="search" class="form-control form-control-sm" placeholder="Search title or notes..." value="{{ search_query }}">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <select name="category" class="form-select form-select-sm">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if category_filter == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.category_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="payment_method" class="form-select form-select-sm">
+                <option value="">All Payment Methods</option>
+                {% for code, label in payment_methods %}
+                    <option value="{{ code }}" {% if payment_filter == code %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="date" name="start_date" class="form-control form-control-sm" value="{{ start_date }}" placeholder="Start Date">
+        </div>
+        <div class="col-md-2">
+            <select name="sort" class="form-select form-select-sm">
+                <option value="-date" {% if sort_by == '-date' %}selected{% endif %}>Newest First</option>
+                <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Oldest First</option>
+                <option value="-amount" {% if sort_by == '-amount' %}selected{% endif %}>Highest Amount</option>
+                <option value="amount" {% if sort_by == 'amount' %}selected{% endif %}>Lowest Amount</option>
+            </select>
+        </div>
+        <div class="col-md-1 d-flex gap-1">
+            <button type="submit" class="btn btn-sm btn-primary-gradient w-100"><i class="bi bi-funnel"></i></button>
+            <a href="{% url 'expense_list' %}" class="btn btn-sm btn-outline-secondary" title="Reset"><i class="bi bi-arrow-counterclockwise"></i></a>
+        </div>
+    </form>
+</div>
+
+<!-- Expense Table -->
+<div class="glass-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table custom-table mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Payment Method</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exp in expenses %}
+                    <tr>
+                        <td class="text-secondary fw-semibold" style="font-size: 0.85rem;">{{ exp.date|date:"M d, Y" }}</td>
+                        <td class="fw-bold text-white">{{ exp.title }}</td>
+                        <td>
+                            {% if exp.category %}
+                                <span class="badge px-2.5 py-1.5 rounded-pill" style="background-color: {{ exp.category.color }}20; color: {{ exp.category.color }}; border: 1px solid {{ exp.category.color }}40;">
+                                    <i class="bi {{ exp.category.icon }} me-1"></i> {{ exp.category.category_name }}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary text-white px-2.5 py-1.5 rounded-pill">Uncategorized</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge bg-dark border border-secondary border-opacity-25 text-secondary px-2.5 py-1.5 rounded-pill">
+                                {{ exp.payment_method }}
+                            </span>
+                        </td>
+                        <td class="fw-bold text-danger fs-6">-{{ currency_symbol }}{{ exp.amount|floatformat:2 }}</td>
+                        <td class="text-secondary small">{{ exp.description|default:"-"|truncatechars:35 }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'expense_edit' exp.id %}" class="btn btn-sm btn-outline-info me-1" title="Edit"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'expense_delete' exp.id %}" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-secondary">
+                            <i class="bi bi-receipt fs-1 d-block mb-2 text-muted"></i>
+                            No expenses recorded matching your search filters.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

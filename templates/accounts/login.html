@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Smart Expense Tracker{% endblock %}
+
+{% block auth_content %}
+<div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-12 col-md-8 col-lg-5">
+        <div class="glass-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="rounded-circle bg-indigo-glow mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-wallet2 text-indigo fs-2"></i>
+                </div>
+                <h3 class="fw-bold text-white mb-1">Welcome Back</h3>
+                <p class="text-secondary small">Sign in to manage your budget & track expenses</p>
+            </div>
+
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label text-secondary small fw-semibold">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary border-opacity-25 text-secondary"><i class="bi bi-person"></i></span>
+                        <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="form-label text-secondary small fw-semibold">Password</label>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary border-opacity-25 text-secondary"><i class="bi bi-lock"></i></span>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary-gradient w-100 py-2.5 rounded-3 fw-semibold mb-3">
+                    Sign In <i class="bi bi-arrow-right ms-2"></i>
+                </button>
+            </form>
+
+            <div class="text-center mt-3 pt-3 border-top border-secondary border-opacity-10">
+                <p class="text-secondary small mb-0">Don't have an account? 
+                    <a href="{% url 'register' %}" class="text-info fw-semibold text-decoration-none ms-1">Register now</a>
+                </p>
+            </div>
+            
+            <div class="mt-4 p-3 rounded-3 bg-dark bg-opacity-50 text-center">
+                <small class="text-secondary">Demo Login: Username: <strong class="text-white">demo</strong> | Password: <strong class="text-white">demo1234</strong></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

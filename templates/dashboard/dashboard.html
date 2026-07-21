@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Smart Expense Tracker{% endblock %}
+
+{% block header_title %}Financial Dashboard{% endblock %}
+
+{% block content %}
+<!-- Budget Warning Alert Banner -->
+{% if is_budget_exceeded %}
+    <div class="alert alert-danger glass-card border-danger border-opacity-50 text-white p-3 mb-4 d-flex align-items-center gap-3">
+        <div class="rounded-circle bg-danger bg-opacity-25 p-2 d-flex align-items-center justify-content-center">
+            <i class="bi bi-exclamation-triangle-fill text-danger fs-3"></i>
+        </div>
+        <div class="flex-grow-1">
+            <h5 class="fw-bold mb-1 text-danger">Warning: Monthly Budget Exceeded!</h5>
+            <p class="mb-0 small">Your expenses this month ({{ currency_symbol }}{{ monthly_expense|floatformat:2 }}) have crossed your monthly budget limit of {{ currency_symbol }}{{ monthly_budget|floatformat:2 }}.</p>
+        </div>
+        <a href="{% url 'budget_list' %}" class="btn btn-sm btn-outline-danger fw-semibold">Adjust Budget</a>
+    </div>
+{% endif %}
+
+<!-- Top Dashboard Summary Cards -->
+<div class="row g-3 mb-4">
+    <!-- Total Income -->
+    <div class="col-12 col-sm-6 col-xl-4">
+        <div class="glass-card stat-card d-flex align-items-center justify-content-between">
+            <div>
+                <small class="text-secondary fw-semibold">Total Income</small>
+                <h3 class="fw-bold text-success mb-1">{{ currency_symbol }}{{ total_income|floatformat:2 }}</h3>
+                <small class="text-secondary" style="font-size:0.75rem;"><i class="bi bi-arrow-down-left text-success me-1"></i> Lifetime Earnings</small>
+            </div>
+            <div class="icon-badge bg-emerald-glow">
+                <i class="bi bi-wallet-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Expenses -->
+    <div class="col-12 col-sm-6 col-xl-4">
+        <div class="glass-card stat-card d-flex align-items-center justify-content-between">
+            <div>
+                <small class="text-secondary fw-semibold">Total Expenses</small>
+                <h3 class="fw-bold text-danger mb-1">{{ currency_symbol }}{{ total_expense|floatformat:2 }}</h3>
+                <small class="text-secondary" style="font-size:0.75rem;"><i class="bi bi-arrow-up-right text-danger me-1"></i> Total Outflow</small>
+            </div>
+            <div class="icon-badge bg-rose-glow">
+                <i class="bi bi-credit-card-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Balance -->
+    <div class="col-12 col-sm-6 col-xl-4">
+        <div class="glass-card stat-card d-flex align-items-center justify-content-between">
+            <div>
+                <small class="text-secondary fw-semibold">Current Balance</small>
+                <h3 class="fw-bold {% if current_balance >= 0 %}text-info{% else %}text-danger{% endif %} mb-1">{{ currency_symbol }}{{ current_balance|floatformat:2 }}</h3>
+                <small class="text-secondary" style="font-size:0.75rem;"><i class="bi bi-cash-stack text-info me-1"></i> Net Funds Available</small>
+            </div>
+            <div class="icon-badge bg-indigo-glow">
+                <i class="bi bi-bank2"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Budget -->
+    <div class="col-12 col-sm-6 col-xl-4">
+        <div class="glass-card stat-card d-flex align-items-center justify-content-between">
+            <div>
+                <small class="text-secondary fw-semibold">Monthly Budget Cap</small>
+                <h3 class="fw-bold text-white mb-1">{{ currency_symbol }}{{ monthly_budget|floatformat:2 }}</h3>
+                <small class="text-secondary" style="font-size:0.75rem;"><i class="bi bi-calendar-month me-1"></i> Target for Current Month</small>
+            </div>
+            <div class="icon-badge bg-amber-glow">
+                <i class="bi bi-pie-chart-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Remaining Budget -->
+    <div class="col-12 col-sm-6 col-xl-4">
+        <div class="glass-card stat-card d-flex align-items-center justify-content-between">
+            <div>
+                <small class="text-secondary fw-semibold">Remaining Monthly Budget</small>
+                <h3 class="fw-bold {% if remaining_budget < 0 %}text-danger{% else %}text-success{% endif %} mb-1">{{ currency_symbol }}{{ remaining_budget|floatformat:2 }}</h3>
+                <small class="text-secondary" style="font-size:0.75rem;"><i class="bi bi-shield-check me-1"></i> Safe Spending Margin</small>
+            </div>
+            <div class="icon-badge bg-cyan-glow">
+                <i class="bi bi-piggy-bank-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Savings Rate -->
+    <div class="col-12 col-sm-6 col-xl-4">
+        <div class="glass-card stat-card d-flex align-items-center justify-content-between">
+            <div>
+                <small class="text-secondary fw-semibold">Savings Ratio</small>
+                <h3 class="fw-bold text-warning mb-1">{{ savings_rate }}%</h3>
+                <small class="text-secondary" style="font-size:0.75rem;"><i class="bi bi-graph-up-arrow text-warning me-1"></i> Retained Cash Ratio</small>
+            </div>
+            <div class="icon-badge bg-amber-glow">
+                <i class="bi bi-percent"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Monthly Budget Usage Progress Card -->
+<div class="glass-card p-4 mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-speedometer text-indigo fs-5"></i>
+            <h6 class="fw-bold text-white mb-0">Monthly Budget Progress ({{ budget_usage_percent }}% Used)</h6>
+        </div>
+        <span class="small fw-bold {% if is_budget_exceeded %}text-danger{% elif budget_usage_percent > 80 %}text-warning{% else %}text-success{% endif %}">
+            {{ currency_symbol }}{{ monthly_expense|floatformat:2 }} / {{ currency_symbol }}{{ monthly_budget|floatformat:2 }}
+        </span>
+    </div>
+    <div class="progress progress-dark" style="height: 12px;">
+        <div class="progress-bar {% if is_budget_exceeded %}bg-danger{% elif budget_usage_percent > 80 %}bg-warning{% else %}bg-success{% endif %}" role="progressbar" style="width: {{ budget_usage_percent }}%;" aria-valuenow="{{ budget_usage_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+</div>
+
+<!-- Dynamic Charts Grid -->
+<div class="row g-4 mb-4">
+    <!-- Bar Chart: Income vs Expense -->
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-bar-chart-line text-indigo me-2"></i> Income vs Expense</h5>
+            <div style="height: 250px; position: relative;">
+                <canvas id="incomeExpenseChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doughnut Chart: Expense by Category -->
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-pie-chart text-success me-2"></i> Expense Category Breakdown</h5>
+            <div style="height: 250px; position: relative;">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Line Chart: Monthly Trends -->
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-graph-up text-cyan me-2"></i> Spending Trends (6 Mo)</h5>
+            <div style="height: 250px; position: relative;">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Transactions Tables -->
+<div class="row g-4">
+    <!-- Recent Expenses -->
+    <div class="col-lg-6">
+        <div class="glass-card p-4 h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="fw-bold text-white mb-0"><i class="bi bi-arrow-up-right-circle text-danger me-2"></i> Recent Expenses</h5>
+                <a href="{% url 'expense_list' %}" class="btn btn-sm btn-outline-secondary">View All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table custom-table mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exp in recent_expenses %}
+                            <tr>
+                                <td class="fw-bold text-white">{{ exp.title }}</td>
+                                <td>
+                                    {% if exp.category %}
+                                        <small class="badge px-2 py-1 rounded-pill" style="background-color: {{ exp.category.color }}20; color: {{ exp.category.color }}; border: 1px solid {{ exp.category.color }}40;">
+                                            <i class="bi {{ exp.category.icon }} me-1"></i> {{ exp.category.category_name }}
+                                        </small>
+                                    {% else %}
+                                        <small class="badge bg-secondary text-white">Uncategorized</small>
+                                    {% endif %}
+                                </td>
+                                <td class="fw-bold text-danger">-{{ currency_symbol }}{{ exp.amount|floatformat:2 }}</td>
+                                <td class="text-secondary small">{{ exp.date|date:"M d" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-secondary py-3">No recent expenses recorded.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Incomes -->
+    <div class="col-lg-6">
+        <div class="glass-card p-4 h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="fw-bold text-white mb-0"><i class="bi bi-arrow-down-left-circle text-success me-2"></i> Recent Incomes</h5>
+                <a href="{% url 'income_list' %}" class="btn btn-sm btn-outline-secondary">View All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table custom-table mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Source</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inc in recent_incomes %}
+                            <tr>
+                                <td class="fw-bold text-white">{{ inc.title }}</td>
+                                <td>
+                                    <small class="badge bg-emerald-glow text-success px-2 py-1 rounded-pill">{{ inc.source }}</small>
+                                </td>
+                                <td class="fw-bold text-success">+{{ currency_symbol }}{{ inc.amount|floatformat:2 }}</td>
+                                <td class="text-secondary small">{{ inc.date|date:"M d" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-secondary py-3">No recent income recorded.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dashboard_charts.js' %}"></script>
+{% endblock %}

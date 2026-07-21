@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile Settings - Smart Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="glass-card p-4 text-center">
+            <div class="position-relative d-inline-block mb-3">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="rounded-circle border border-3 border-indigo shadow-lg" style="width: 120px; height: 120px; object-fit: cover;">
+                {% else %}
+                    <div class="rounded-circle bg-indigo-glow border border-3 border-indigo d-flex align-items-center justify-content-center mx-auto" style="width: 120px; height: 120px; font-size: 2.5rem;">
+                        {{ user.username|first|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            <h4 class="fw-bold text-white mb-1">{{ user.get_full_name|default:user.username }}</h4>
+            <p class="text-secondary small mb-3">@{{ user.username }} | {{ user.email }}</p>
+            <div class="badge bg-indigo-glow text-indigo px-3 py-2 rounded-pill mb-3">
+                Preferred Currency: {{ user.profile.currency }}
+            </div>
+            <p class="text-secondary small">Joined on {{ user.date_joined|date:"M d, Y" }}</p>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="glass-card p-4">
+            <h5 class="fw-bold text-white mb-4"><i class="bi bi-person-gear text-indigo me-2"></i> Update Account Profile</h5>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h6 class="text-indigo fw-semibold mb-3">User Details</h6>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary small fw-semibold">First Name</label>
+                        {{ u_form.first_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary small fw-semibold">Last Name</label>
+                        {{ u_form.last_name }}
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label text-secondary small fw-semibold">Email Address</label>
+                        {{ u_form.email }}
+                    </div>
+                </div>
+
+                <h6 class="text-indigo fw-semibold mb-3">Profile Preferences</h6>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary small fw-semibold">Phone Number</label>
+                        {{ p_form.phone }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary small fw-semibold">Currency Symbol</label>
+                        {{ p_form.currency }}
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label text-secondary small fw-semibold">Profile Picture Avatar</label>
+                        {{ p_form.avatar }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-primary-gradient px-4 py-2 rounded-3 fw-semibold">
+                        <i class="bi bi-check2-circle me-1"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

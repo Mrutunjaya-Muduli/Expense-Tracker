@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Income History - Smart Expense Tracker{% endblock %}
+
+{% block header_title %}Income History{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+        <h4 class="fw-bold text-white mb-1">Income Tracker</h4>
+        <p class="text-secondary small mb-0">Manage and filter your total earnings & revenue sources</p>
+    </div>
+    <div>
+        <a href="{% url 'income_add' %}" class="btn btn-primary-gradient px-4 py-2 rounded-3 fw-semibold">
+            <i class="bi bi-plus-lg me-1"></i> Add New Income
+        </a>
+    </div>
+</div>
+
+<!-- Summary Card -->
+<div class="row mb-4">
+    <div class="col-md-6 col-lg-4">
+        <div class="glass-card stat-card d-flex align-items-center gap-3">
+            <div class="icon-badge bg-emerald-glow">
+                <i class="bi bi-wallet-fill"></i>
+            </div>
+            <div>
+                <small class="text-secondary fw-semibold">Total Filtered Income</small>
+                <h3 class="fw-bold text-success mb-0">{{ currency_symbol }}{{ total_income|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="glass-card p-3 mb-4">
+    <form method="GET" class="row g-2 align-items-center">
+        <div class="col-md-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-dark border-secondary border-opacity-25 text-secondary"><i class="bi bi-search"></i></span>
+                <input type="text" name="search" class="form-control form-control-sm" placeholder="Search title or note..." value="{{ search_query }}">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <select name="source" class="form-select form-select-sm">
+                <option value="">All Sources</option>
+                {% for code, label in sources %}
+                    <option value="{{ code }}" {% if source_filter == code %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="date" name="start_date" class="form-control form-control-sm" value="{{ start_date }}" placeholder="Start Date">
+        </div>
+        <div class="col-md-2">
+            <input type="date" name="end_date" class="form-control form-control-sm" value="{{ end_date }}" placeholder="End Date">
+        </div>
+        <div class="col-md-2">
+            <select name="sort" class="form-select form-select-sm">
+                <option value="-date" {% if sort_by == '-date' %}selected{% endif %}>Newest First</option>
+                <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Oldest First</option>
+                <option value="-amount" {% if sort_by == '-amount' %}selected{% endif %}>Highest Amount</option>
+                <option value="amount" {% if sort_by == 'amount' %}selected{% endif %}>Lowest Amount</option>
+            </select>
+        </div>
+        <div class="col-md-1 d-flex gap-1">
+            <button type="submit" class="btn btn-sm btn-primary-gradient w-100"><i class="bi bi-funnel"></i></button>
+            <a href="{% url 'income_list' %}" class="btn btn-sm btn-outline-secondary" title="Reset"><i class="bi bi-arrow-counterclockwise"></i></a>
+        </div>
+    </form>
+</div>
+
+<!-- Income Table -->
+<div class="glass-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table custom-table mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Source</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for income in incomes %}
+                    <tr>
+                        <td class="text-secondary fw-semibold" style="font-size: 0.85rem;">{{ income.date|date:"M d, Y" }}</td>
+                        <td class="fw-bold text-white">{{ income.title }}</td>
+                        <td>
+                            <span class="badge bg-emerald-glow text-success px-2.5 py-1.5 rounded-pill">
+                                <i class="bi bi-tag-fill me-1"></i> {{ income.source }}
+                            </span>
+                        </td>
+                        <td class="fw-bold text-success fs-6">+{{ currency_symbol }}{{ income.amount|floatformat:2 }}</td>
+                        <td class="text-secondary small">{{ income.description|default:"-"|truncatechars:40 }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'income_edit' income.id %}" class="btn btn-sm btn-outline-info me-1" title="Edit"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'income_delete' income.id %}" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-secondary">
+                            <i class="bi bi-inbox fs-1 d-block mb-2 text-muted"></i>
+                            No income records found matching your filters.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
