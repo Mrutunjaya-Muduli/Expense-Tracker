@@ -16,7 +16,7 @@ def register_view(request):
             ensure_default_categories()
             login(request, user)
             messages.success(request, f"Welcome to Smart Expense Tracker, {user.username}!")
-            return redirect('dashboard')
+            return redirect('home')
         else:
             messages.error(request, "Registration failed. Please check the form errors below.")
     else:
@@ -32,7 +32,7 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             messages.success(request, f"Welcome back, {user.username}!")
-            next_url = request.GET.get('next', 'dashboard')
+            next_url = request.GET.get('next', 'home')
             return redirect(next_url)
         else:
             messages.error(request, "Invalid username or password.")
