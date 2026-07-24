@@ -1,9 +1,0 @@
-#!/bin/bash
-echo "Installing requirements..."
-python3.12 -m pip install -r requirements.txt
-
-echo "Collecting static files..."
-python3.12 manage.py collectstatic --noinput --clear
-
-echo "Running database migrations..."
-python3.12 manage.py migrate --noinput

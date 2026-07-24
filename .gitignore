@@ -8,3 +8,6 @@ staticfiles/
 .vscode/
 .idea/
 .DS_Store
+.env
+.env.*
+.env.local
