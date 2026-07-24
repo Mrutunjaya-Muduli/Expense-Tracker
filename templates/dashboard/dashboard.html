@@ -68,7 +68,18 @@
     <div class="col-12 col-sm-6 col-xl-4">
         <div class="glass-card stat-card d-flex align-items-center justify-content-between">
             <div>
-                <small class="text-secondary fw-semibold">Monthly Budget Cap</small>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <small class="text-secondary fw-semibold">Monthly Budget Cap</small>
+                    {% if monthly_budget_obj %}
+                        <a href="{% url 'budget_edit' monthly_budget_obj.id %}" class="text-indigo text-decoration-none small d-inline-flex align-items-center gap-1 fw-bold" title="Adjust Budget" style="font-size: 0.75rem;">
+                            <i class="bi bi-pencil-square"></i> Adjust
+                        </a>
+                    {% else %}
+                        <a href="{% url 'budget_set' %}" class="text-indigo text-decoration-none small d-inline-flex align-items-center gap-1 fw-bold" title="Set Budget" style="font-size: 0.75rem;">
+                            <i class="bi bi-plus-circle"></i> Set
+                        </a>
+                    {% endif %}
+                </div>
                 <h3 class="fw-bold text-white mb-1">{{ currency_symbol }}{{ monthly_budget|floatformat:2 }}</h3>
                 <small class="text-secondary" style="font-size:0.75rem;"><i class="bi bi-calendar-month me-1"></i> Target for Current Month</small>
             </div>

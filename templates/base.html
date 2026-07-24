@@ -19,8 +19,9 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and request.resolver_match and request.resolver_match.url_name != 'home' %}
         {% include 'sidebar.html' %}
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
         <main class="main-content">
             {% include 'navbar.html' %}
 
@@ -66,11 +67,30 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
             const sidebar = document.getElementById('sidebar');
-            if (sidebarToggle && sidebar) {
-                sidebarToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('show');
-                });
+            const backdrop = document.getElementById('sidebarBackdrop');
+
+            function openSidebar() {
+                if (sidebar) sidebar.classList.add('show');
+                if (backdrop) backdrop.classList.add('show');
+            }
+
+            function closeSidebar() {
+                if (sidebar) sidebar.classList.remove('show');
+                if (backdrop) backdrop.classList.remove('show');
+            }
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', openSidebar);
+            }
+
+            if (sidebarClose) {
+                sidebarClose.addEventListener('click', closeSidebar);
+            }
+
+            if (backdrop) {
+                backdrop.addEventListener('click', closeSidebar);
             }
         });
     </script>

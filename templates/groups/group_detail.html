@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ group.name }} - Group Splitter{% endblock %}
+
+{% block header_title %}{{ group.name }}{% endblock %}
+
+{% block content %}
+<!-- Back to Groups Link -->
+<div class="mb-4">
+    <a href="{% url 'group_list' %}" class="btn btn-sm btn-outline-secondary px-3 py-1.5 rounded-3 fw-semibold small d-inline-flex align-items-center gap-1.5">
+        <i class="bi bi-arrow-left"></i> Back to Groups
+    </a>
+</div>
+
+<!-- Group Info & Overview Section -->
+<div class="row g-4 mb-4">
+    <!-- Group Details -->
+    <div class="col-lg-8">
+        <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+                <div class="d-flex align-items-start justify-content-between mb-3">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h4 class="fw-bold text-white mb-0">{{ group.name }}</h4>
+                            {% if group.is_settled %}
+                                <span class="badge bg-emerald-glow text-success px-2.5 py-1 rounded-pill" style="font-size:0.7rem;">Settled</span>
+                            {% else %}
+                                <span class="badge bg-rose-glow text-danger px-2.5 py-1 rounded-pill" style="font-size:0.7rem;">Unsettled</span>
+                            {% endif %}
+                        </div>
+                        <p class="text-secondary small mb-0">{{ group.description|default:"No description provided." }}</p>
+                    </div>
+                    <div class="text-end">
+                        <small class="text-secondary d-block mb-1">Invite Code</small>
+                        <span class="badge bg-indigo-glow text-indigo px-3 py-2 fs-6 rounded-pill fw-bold border border-indigo border-opacity-25" style="letter-spacing: 0.05em;">
+                            {{ group.invite_code }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-3 border-top border-secondary border-opacity-10 d-flex flex-wrap gap-4 align-items-center justify-content-between">
+                <div class="small">
+                    <span class="text-secondary">Created by</span> 
+                    <strong class="text-white">{{ group.created_by.username|default:"System" }}</strong> 
+                    <span class="text-secondary">on {{ group.created_at|date:"M d, Y" }}</span>
+                </div>
+                <a href="{% url 'group_expense_add' group.id %}" class="btn btn-primary-gradient px-4 py-2 rounded-3 fw-bold d-flex align-items-center gap-2">
+                    <i class="bi bi-plus-lg fs-5"></i> Add Group Expense
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settlement Guide / Suggestion Engine -->
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-calculator text-warning me-2"></i> Debt Settlements</h5>
+            
+            <div class="d-flex flex-column gap-3">
+                {% for settlement in suggested_settlements %}
+                    <div class="p-3 rounded-4 bg-dark bg-opacity-50 border border-secondary border-opacity-10 d-flex flex-column gap-3 shadow-sm">
+                        <!-- Visual payment flow -->
+                        <div class="d-flex align-items-center justify-content-between">
+                            <!-- Debtor -->
+                            <div class="d-flex flex-column align-items-center gap-1 flex-grow-1 text-center">
+                                {% if settlement.from_user.profile.avatar %}
+                                    <img src="{{ settlement.from_user.profile.avatar.url }}" alt="{{ settlement.from_user.username }}" class="rounded-circle border border-danger border-opacity-50" style="width: 32px; height: 32px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-danger bg-opacity-15 text-danger d-flex align-items-center justify-content-center fw-bold text-uppercase" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                        {{ settlement.from_user.username|slice:":2" }}
+                                    </div>
+                                {% endif %}
+                                <span class="small fw-semibold text-danger" style="font-size:0.75rem;">{{ settlement.from_user.username }}</span>
+                            </div>
+
+                            <!-- Arrow and Amount -->
+                            <div class="d-flex flex-column align-items-center justify-content-center px-2 text-center" style="min-width: 95px;">
+                                <span class="badge bg-warning bg-opacity-15 text-warning fw-bold mb-1" style="font-size: 0.68rem; letter-spacing: 0.01em;">
+                                    Pays {{ currency_symbol }}{{ settlement.amount|floatformat:2 }}
+                                </span>
+                                <i class="bi bi-arrow-right text-secondary fs-6 opacity-75"></i>
+                            </div>
+
+                            <!-- Creditor -->
+                            <div class="d-flex flex-column align-items-center gap-1 flex-grow-1 text-center">
+                                {% if settlement.to_user.profile.avatar %}
+                                    <img src="{{ settlement.to_user.profile.avatar.url }}" alt="{{ settlement.to_user.username }}" class="rounded-circle border border-success border-opacity-50" style="width: 32px; height: 32px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-success bg-opacity-15 text-success d-flex align-items-center justify-content-center fw-bold text-uppercase" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                        {{ settlement.to_user.username|slice:":2" }}
+                                    </div>
+                                {% endif %}
+                                <span class="small fw-semibold text-success" style="font-size:0.75rem;">{{ settlement.to_user.username }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Settle Button -->
+                        <form method="POST" action="{% url 'settle_payment' group.id %}" class="m-0">
+                            {% csrf_token %}
+                            <input type="hidden" name="from_user_id" value="{{ settlement.from_user.id }}">
+                            <input type="hidden" name="to_user_id" value="{{ settlement.to_user.id }}">
+                            <input type="hidden" name="amount" value="{{ settlement.amount }}">
+                            <button type="submit" class="btn btn-sm btn-outline-warning w-100 py-2 rounded-3 text-warning fw-bold fs-7 d-flex align-items-center justify-content-center gap-2 hover-bg-warning">
+                                <i class="bi bi-check-circle-fill"></i> Settle Debt
+                            </button>
+                        </form>
+                    </div>
+                {% empty %}
+                    <div class="text-center py-5 px-3">
+                        <div class="rounded-circle bg-emerald-glow mx-auto d-flex align-items-center justify-content-center mb-3 shadow-lg" style="width: 58px; height: 58px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                            <i class="bi bi-shield-fill-check text-success fs-3"></i>
+                        </div>
+                        <h6 class="fw-bold text-white mb-2">Everyone is Settled Up!</h6>
+                        <p class="text-secondary small mb-0 px-2" style="font-size:0.78rem; line-height:1.5;">Outstanding balances are perfectly cleared. No debts pending between group members.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Members & Balances -->
+    <div class="col-lg-4">
+        <div class="glass-card p-4">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-person-fill text-indigo me-2"></i> Members & Balances</h5>
+            
+            <div class="d-flex flex-column gap-3">
+                {% for mb in member_balances %}
+                    <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-10">
+                        <div class="d-flex align-items-center gap-2.5">
+                            {% if mb.user.profile.avatar %}
+                                <img src="{{ mb.user.profile.avatar.url }}" alt="{{ mb.user.username }}" class="avatar-img" style="width:36px; height:36px;">
+                            {% else %}
+                                <div class="avatar-img bg-indigo-glow d-flex align-items-center justify-content-center fw-bold" style="width:36px; height:36px;">
+                                    <i class="bi bi-person-fill fs-5"></i>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <div class="fw-bold text-white small">{{ mb.user.username }}</div>
+                                {% if mb.is_creditor %}
+                                    <small class="text-success" style="font-size: 0.72rem;">Lent money</small>
+                                {% elif mb.is_debtor %}
+                                    <small class="text-danger" style="font-size: 0.72rem;">Owes money</small>
+                                {% else %}
+                                    <small class="text-secondary" style="font-size: 0.72rem;">Settled up</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-end">
+                            <span class="fw-bold small d-block {% if mb.is_creditor %}text-success{% elif mb.is_debtor %}text-danger{% else %}text-secondary{% endif %}">
+                                {% if mb.is_creditor %}+{% endif %}{{ currency_symbol }}{{ mb.balance|floatformat:2 }}
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if non_members %}
+                <div class="mt-4 pt-3 border-top border-secondary border-opacity-10">
+                    <h6 class="fw-bold text-white mb-2 small"><i class="bi bi-person-plus text-indigo me-1"></i> Add Existing Member</h6>
+                    <form method="POST" action="{% url 'group_detail' group.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_member">
+                        <div class="d-flex gap-2">
+                            <select name="user_id" class="form-select form-select-sm text-white flex-grow-1" required style="background-color: rgba(15, 23, 42, 0.6);">
+                                <option value="" disabled selected>Select user...</option>
+                                {% for u in non_members %}
+                                    <option value="{{ u.id }}">{{ u.username }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary-gradient px-3 fw-bold">Add</button>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Expenses Ledger -->
+    <div class="col-lg-8">
+        <div class="glass-card p-4">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-receipt text-danger me-2"></i> Expense Ledger</h5>
+            
+            <div class="table-responsive">
+                <table class="table custom-table mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th>Expense Title</th>
+                            <th>Paid By</th>
+                            <th>Split Details</th>
+                            <th>Total Amount</th>
+                            <th>Date</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exp in expenses %}
+                            <tr>
+                                <td class="fw-bold text-white small">{{ exp.title }}</td>
+                                <td>
+                                    <span class="badge bg-dark bg-opacity-50 border border-secondary border-opacity-20 text-white px-2.5 py-1.5 rounded-pill d-inline-flex align-items-center gap-1.5 shadow-sm">
+                                        {% if exp.paid_by.profile.avatar %}
+                                            <img src="{{ exp.paid_by.profile.avatar.url }}" alt="{{ exp.paid_by.username }}" class="rounded-circle" style="width: 18px; height: 18px; object-fit: cover;">
+                                        {% else %}
+                                            <i class="bi bi-person-fill text-indigo" style="font-size: 0.8rem;"></i>
+                                        {% endif %}
+                                        <span style="font-size: 0.72rem; font-weight: 500;">{{ exp.paid_by.username }}</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        {% for split in exp.splits.all %}
+                                            <span class="badge bg-indigo-glow text-indigo px-2.5 py-1 rounded-pill" style="font-size: 0.68rem; font-weight: 600; border: 1px solid rgba(99, 102, 241, 0.2);">
+                                                {{ split.user.username }}
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td class="fw-bold text-white">{{ currency_symbol }}{{ exp.amount|floatformat:2 }}</td>
+                                <td class="text-secondary small">{{ exp.date|date:"M d, Y" }}</td>
+                                <td class="text-end">
+                                    <form method="POST" action="{% url 'group_expense_delete' group.id exp.id %}" onsubmit="return confirm('Are you sure you want to delete this expense?');" class="m-0">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger p-1 rounded-2" title="Delete Expense">
+                                            <i class="bi bi-trash-fill px-1"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-secondary py-5">
+                                    <div class="mb-2"><i class="bi bi-receipt-cutoff fs-2 opacity-50"></i></div>
+                                    No shared expenses recorded yet. Click "Add Group Expense" to split bills.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -47,6 +47,7 @@ def dashboard_view(request):
         'monthly_income': monthly_income,
         'monthly_expense': monthly_expense,
         'monthly_budget': monthly_budget,
+        'monthly_budget_obj': monthly_budget_obj,
         'remaining_budget': remaining_budget,
         'is_budget_exceeded': is_budget_exceeded,
         'budget_usage_percent': budget_usage_percent,

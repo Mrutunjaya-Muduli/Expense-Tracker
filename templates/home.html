@@ -55,11 +55,8 @@
 </nav>
 
 <!-- Hero Section -->
-<div class="row align-items-center py-4 py-lg-5 g-5">
+<div class="row align-items-center py-4 py-lg-5 g-5 hero-glow-container">
     <div class="col-lg-6">
-        <div class="badge bg-indigo-glow text-indigo px-3 py-2 rounded-pill mb-3 fw-semibold">
-            <i class="bi bi-stars me-1"></i> Smart Financial Management Platform
-        </div>
         <h1 class="display-4 fw-extrabold text-white mb-3 leading-tight" style="letter-spacing: -0.02em;">
             Take Control of Your <span class="text-indigo">Personal Finances</span>
         </h1>
@@ -86,67 +83,80 @@
             {% endif %}
         </div>
 
-        <!-- Quick Demo Login Note -->
-        <div class="glass-card p-3 d-inline-flex align-items-center gap-3 border border-secondary border-opacity-25">
-            <div class="rounded-circle bg-emerald-glow p-2 d-flex align-items-center justify-content-center" style="width:36px; height:36px;">
-                <i class="bi bi-key-fill text-success"></i>
-            </div>
-            <div class="small">
-                <span class="text-secondary">Instant Demo Access:</span>
-                <span class="text-white fw-bold ms-1">demo</span> / <span class="text-white fw-bold">demo1234</span>
-            </div>
-        </div>
     </div>
 
     <!-- Live App Interactive Preview Graphic -->
-    <div class="col-lg-6">
-        <div class="glass-card p-4 position-relative overflow-hidden shadow-2xl">
+    <div class="col-lg-6 position-relative">
+        <div class="hero-glow-bg"></div>
+        <div class="glass-card p-4 position-relative overflow-hidden shadow-2xl" id="simulator-card">
             <div class="d-flex align-items-center justify-content-between mb-4 border-bottom border-secondary border-opacity-10 pb-3">
                 <div class="d-flex align-items-center gap-2">
                     <span class="rounded-circle bg-danger d-inline-block" style="width:10px; height:10px;"></span>
                     <span class="rounded-circle bg-warning d-inline-block" style="width:10px; height:10px;"></span>
                     <span class="rounded-circle bg-success d-inline-block" style="width:10px; height:10px;"></span>
                 </div>
-                <small class="text-secondary fw-semibold"><i class="bi bi-shield-check text-success me-1"></i> Live Financial Preview</small>
+                <small class="text-secondary fw-semibold"><i class="bi bi-shield-check text-success me-1"></i> Live Financial Simulator</small>
             </div>
 
             <!-- Metric Cards Preview Grid -->
             <div class="row g-3 mb-4">
                 <div class="col-6">
-                    <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-10">
+                    <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-10" id="sim-income-card">
                         <small class="text-secondary d-block">Total Income</small>
-                        <h4 class="fw-bold text-success mb-0">₹5,350.00</h4>
+                        <h4 class="fw-bold text-success mb-0" id="sim-income">₹5,350.00</h4>
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-10">
+                    <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-10" id="sim-expense-card">
                         <small class="text-secondary d-block">Total Expense</small>
-                        <h4 class="fw-bold text-danger mb-0">₹1,690.50</h4>
+                        <h4 class="fw-bold text-danger mb-0" id="sim-expense">₹1,690.50</h4>
                     </div>
                 </div>
             </div>
 
             <!-- Progress Bar Mock -->
-            <div class="p-3 rounded-3 bg-dark bg-opacity-40 mb-3">
+            <div class="p-3 rounded-3 bg-dark bg-opacity-40 mb-3" id="sim-budget-card">
                 <div class="d-flex justify-content-between text-secondary small mb-1">
-                    <span>Monthly Budget Cap</span>
-                    <span class="fw-bold text-success">67.6% Used</span>
+                    <span>Monthly Budget Cap (₹2,500)</span>
+                    <span class="fw-bold text-success" id="sim-budget-percent">67.6% Used</span>
                 </div>
                 <div class="progress progress-dark" style="height: 8px;">
-                    <div class="progress-bar bg-success" style="width: 67.6%;"></div>
+                    <div id="sim-progress-bar" class="progress-bar bg-success" style="width: 67.6%; transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.8s ease;"></div>
                 </div>
             </div>
 
             <!-- Recent Activity Mock -->
-            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-10">
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-emerald-glow text-success p-2 rounded-circle"><i class="bi bi-arrow-down-left"></i></span>
-                    <div>
-                        <div class="fw-bold text-white small">Monthly Salary</div>
-                        <small class="text-secondary" style="font-size: 0.72rem;">Income • Primary</small>
+            <div id="sim-activity-list" class="d-flex flex-column gap-2">
+                <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-10">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-rose-glow text-danger p-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-arrow-up-right"></i></span>
+                        <div>
+                            <div class="fw-bold text-white small">Streaming Subscription</div>
+                            <small class="text-secondary" style="font-size: 0.72rem;">Expense • Entertainment</small>
+                        </div>
                     </div>
+                    <span class="fw-bold text-danger small">-₹450.00</span>
                 </div>
-                <span class="fw-bold text-success small">+₹4,500.00</span>
+                <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-10">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-rose-glow text-danger p-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-arrow-up-right"></i></span>
+                        <div>
+                            <div class="fw-bold text-white small">Grocery Shopping</div>
+                            <small class="text-secondary" style="font-size: 0.72rem;">Expense • Food</small>
+                        </div>
+                    </div>
+                    <span class="fw-bold text-danger small">-₹1,240.50</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-10">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-emerald-glow text-success p-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-arrow-down-left"></i></span>
+                        <div>
+                            <div class="fw-bold text-white small">Freelance Design</div>
+                            <small class="text-secondary" style="font-size: 0.72rem;">Income • Business</small>
+                        </div>
+                    </div>
+                    <span class="fw-bold text-success small">+₹850.00</span>
+                </div>
             </div>
         </div>
     </div>
@@ -254,4 +264,122 @@
 <footer class="text-center text-secondary py-4 border-top border-secondary border-opacity-10 small">
     <p class="mb-0">© 2026 Smart Expense Tracker & Budget Management System. All rights reserved.</p>
 </footer>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const transactionsPool = [
+            { name: "Coffee at Starbucks", amount: -240.00, category: "Food", type: "expense", icon: "bi-arrow-up-right", badgeClass: "bg-rose-glow text-danger" },
+            { name: "Salary Bonus", amount: 1200.00, category: "Income", type: "income", icon: "bi-arrow-down-left", badgeClass: "bg-emerald-glow text-success" },
+            { name: "Grocery Store", amount: -420.50, category: "Food", type: "expense", icon: "bi-arrow-up-right", badgeClass: "bg-rose-glow text-danger" },
+            { name: "Electricity Bill", amount: -820.00, category: "Utilities", type: "expense", icon: "bi-arrow-up-right", badgeClass: "bg-rose-glow text-danger" },
+            { name: "Freelance Project", amount: 1500.00, category: "Business", type: "income", icon: "bi-arrow-down-left", badgeClass: "bg-emerald-glow text-success" },
+            { name: "Cinema Tickets", amount: -350.00, category: "Entertainment", type: "expense", icon: "bi-arrow-up-right", badgeClass: "bg-rose-glow text-danger" }
+        ];
+
+        let currentIncome = 5350.00;
+        let currentExpense = 1690.50;
+        const budgetCap = 2500.00;
+        let poolIndex = 0;
+        let stepCount = 0;
+
+        const incomeEl = document.getElementById('sim-income');
+        const expenseEl = document.getElementById('sim-expense');
+        const incomeCard = document.getElementById('sim-income-card');
+        const expenseCard = document.getElementById('sim-expense-card');
+        const budgetPercentEl = document.getElementById('sim-budget-percent');
+        const progressBarEl = document.getElementById('sim-progress-bar');
+        const activityList = document.getElementById('sim-activity-list');
+
+        const initialListHTML = activityList.innerHTML;
+
+        function formatCurrency(amount) {
+            return '₹' + amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function updateMetrics(animate = true) {
+            incomeEl.textContent = formatCurrency(currentIncome);
+            expenseEl.textContent = formatCurrency(currentExpense);
+
+            const percentage = (currentExpense / budgetCap) * 100;
+            budgetPercentEl.textContent = percentage.toFixed(1) + '% Used';
+            progressBarEl.style.width = Math.min(percentage, 100) + '%';
+
+            if (percentage > 100) {
+                progressBarEl.className = 'progress-bar bg-danger';
+                budgetPercentEl.className = 'fw-bold text-danger';
+            } else if (percentage > 85) {
+                progressBarEl.className = 'progress-bar bg-warning';
+                budgetPercentEl.className = 'fw-bold text-warning';
+            } else {
+                progressBarEl.className = 'progress-bar bg-success';
+                budgetPercentEl.className = 'fw-bold text-success';
+            }
+        }
+
+        function addTransaction(tx) {
+            if (tx.type === 'expense') {
+                currentExpense += Math.abs(tx.amount);
+                if (expenseCard) {
+                    expenseCard.classList.remove('sim-flash-down');
+                    void expenseCard.offsetWidth; // Trigger reflow
+                    expenseCard.classList.add('sim-flash-down');
+                }
+            } else {
+                currentIncome += Math.abs(tx.amount);
+                if (incomeCard) {
+                    incomeCard.classList.remove('sim-flash-up');
+                    void incomeCard.offsetWidth; // Trigger reflow
+                    incomeCard.classList.add('sim-flash-up');
+                }
+            }
+
+            updateMetrics(true);
+
+            const itemHTML = `
+                <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-10 activity-item-new">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge ${tx.badgeClass} p-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+                            <i class="bi ${tx.icon}"></i>
+                        </span>
+                        <div>
+                            <div class="fw-bold text-white small">${tx.name}</div>
+                            <small class="text-secondary" style="font-size: 0.72rem;">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)} • ${tx.category}</small>
+                        </div>
+                    </div>
+                    <span class="fw-bold ${tx.type === 'expense' ? 'text-danger' : 'text-success'} small">
+                        ${tx.type === 'expense' ? '-' : '+'}${formatCurrency(Math.abs(tx.amount))}
+                    </span>
+                </div>
+            `;
+
+            activityList.insertAdjacentHTML('afterbegin', itemHTML);
+
+            if (activityList.children.length > 3) {
+                activityList.removeChild(activityList.lastElementChild);
+            }
+        }
+
+        function resetSimulation() {
+            currentIncome = 5350.00;
+            currentExpense = 1690.50;
+            poolIndex = 0;
+            stepCount = 0;
+            activityList.innerHTML = initialListHTML;
+            updateMetrics(false);
+        }
+
+        setInterval(function() {
+            stepCount++;
+            if (stepCount > 6) {
+                resetSimulation();
+            } else {
+                const tx = transactionsPool[poolIndex];
+                addTransaction(tx);
+                poolIndex = (poolIndex + 1) % transactionsPool.length;
+            }
+        }, 7000);
+    });
+</script>
+{% endblock %}
 {% endblock %}

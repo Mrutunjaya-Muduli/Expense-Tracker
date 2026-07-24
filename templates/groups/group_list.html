@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Group Sharing - Smart Expense Tracker{% endblock %}
+
+{% block header_title %}Group Sharing / Splitter{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Groups List Column -->
+    <div class="col-lg-8">
+        <div class="glass-card p-4 h-100">
+            <h5 class="fw-bold text-white mb-4"><i class="bi bi-people-fill text-indigo me-2"></i> Your Groups</h5>
+            
+            <div class="row g-3">
+                {% for group in groups %}
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 bg-dark bg-opacity-40 border border-secondary border-opacity-10 d-flex flex-column justify-content-between h-100 hover-scale">
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <h6 class="fw-bold text-white mb-0">{{ group.name }}</h6>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        {% if group.is_settled %}
+                                            <span class="badge bg-emerald-glow text-success px-2 py-0.5 rounded-pill" style="font-size:0.65rem;">Settled</span>
+                                        {% else %}
+                                            <span class="badge bg-rose-glow text-danger px-2 py-0.5 rounded-pill" style="font-size:0.65rem;">Unsettled</span>
+                                        {% endif %}
+                                        <span class="badge bg-indigo-glow text-indigo px-2.5 py-1 rounded-pill small">
+                                            <i class="bi bi-person-fill me-1"></i> {{ group.members.count }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <p class="text-secondary small mb-3" style="line-height: 1.4;">
+                                    {{ group.description|default:"No description provided."|truncatechars:85 }}
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between pt-2 border-top border-secondary border-opacity-10">
+                                <small class="text-secondary" style="font-size: 0.72rem;">
+                                    Code: <strong class="text-white">{{ group.invite_code }}</strong>
+                                </small>
+                                <a href="{% url 'group_detail' group.id %}" class="btn btn-sm btn-primary-gradient px-3 py-1 rounded-2">
+                                    View Details <i class="bi bi-chevron-right ms-1 small"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <div class="rounded-circle bg-indigo-glow mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="bi bi-people text-indigo fs-3"></i>
+                        </div>
+                        <h6 class="fw-bold text-white mb-1">No Groups Yet</h6>
+                        <p class="text-secondary small mb-0">Create a new group or join an existing one using an invite code on the right.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions Column (Create & Join) -->
+    <div class="col-lg-4">
+        <div class="d-flex flex-column gap-4">
+            <!-- Join Group Card -->
+            <div class="glass-card p-4">
+                <h5 class="fw-bold text-white mb-3"><i class="bi bi-plus-circle text-success me-2"></i> Join a Group</h5>
+                <p class="text-secondary small mb-3">Enter a 6-character invite code to participate in shared expenses.</p>
+                
+                <form method="POST" action="{% url 'group_list' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="join">
+                    <div class="mb-3">
+                        <input type="text" name="invite_code" class="form-control text-uppercase text-center fw-bold" placeholder="E.G. AB12CD" required maxlength="10" style="letter-spacing: 0.15em;">
+                    </div>
+                    <button type="submit" class="btn btn-outline-success w-100 fw-bold py-2 rounded-3">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Join Group
+                    </button>
+                </form>
+            </div>
+
+            <!-- Create Group Card -->
+            <div class="glass-card p-4">
+                <h5 class="fw-bold text-white mb-3"><i class="bi bi-folder-plus text-indigo me-2"></i> Create a Group</h5>
+                <p class="text-secondary small mb-3">Start a new shared ledger for trips, flatmates, or activities.</p>
+                
+                <form method="POST" action="{% url 'group_list' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="create">
+                    <div class="mb-3">
+                        <label class="form-label small text-secondary">Group Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="e.g. Flatmates 302" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small text-secondary">Description (Optional)</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Shared monthly bills, groceries, etc..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary-gradient w-100 py-2 rounded-3">
+                        <i class="bi bi-check-lg me-1"></i> Create Group
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-scale {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.hover-scale:hover {
+    transform: translateY(-2px);
+    border-color: rgba(99, 102, 241, 0.3) !important;
+}
+</style>
+{% endblock %}

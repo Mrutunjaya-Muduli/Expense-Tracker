@@ -9,6 +9,7 @@
                 <small class="text-secondary" style="font-size: 0.72rem;">Budget System</small>
             </div>
         </a>
+        <button class="btn-close btn-close-white d-lg-none" type="button" id="sidebarClose" aria-label="Close"></button>
     </div>
 
     <hr class="border-secondary opacity-25 my-3">
@@ -16,8 +17,8 @@
     <ul class="nav flex-column mb-auto">
         <li class="nav-item">
             <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                <i class="bi bi-house-door"></i>
-                <span>Home Page</span>
+                <i class="bi bi-arrow-left-circle"></i>
+                <span>Back to Home</span>
             </a>
         </li>
         <li class="nav-item">
@@ -54,6 +55,12 @@
             <a href="{% url 'reports' %}" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
                 <i class="bi bi-file-earmark-bar-graph"></i>
                 <span>Reports</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'group_list' %}" class="nav-link {% if 'groups' in request.path %}active{% endif %}">
+                <i class="bi bi-people"></i>
+                <span>Group Sharing</span>
             </a>
         </li>
     </ul>

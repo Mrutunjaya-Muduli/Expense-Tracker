@@ -10,7 +10,7 @@ from expenses.utils import ensure_default_categories
 @never_cache
 def register_view(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('dashboard')
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -18,7 +18,7 @@ def register_view(request):
             ensure_default_categories()
             login(request, user)
             messages.success(request, f"Welcome to Smart Expense Tracker, {user.username}!")
-            return redirect('home')
+            return redirect('dashboard')
         else:
             messages.error(request, "Registration failed. Please check the form errors below.")
     else:
@@ -28,14 +28,14 @@ def register_view(request):
 @never_cache
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('dashboard')
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             messages.success(request, f"Welcome back, {user.username}!")
-            next_url = request.GET.get('next', 'home')
+            next_url = request.GET.get('next', 'dashboard')
             return redirect(next_url)
         else:
             messages.error(request, "Invalid username or password.")

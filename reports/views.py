@@ -132,7 +132,7 @@ def export_pdf(request):
     total_income = incomes.aggregate(t=Sum('amount'))['t'] or 0
     total_expense = expenses.aggregate(t=Sum('amount'))['t'] or 0
     net_savings = total_income - total_expense
-    currency = getattr(request.user.profile, 'currency', '$')
+    currency = request.user.profile.currency if hasattr(request.user, 'profile') else '₹'
 
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=36, leftMargin=36, topMargin=36, bottomMargin=36)

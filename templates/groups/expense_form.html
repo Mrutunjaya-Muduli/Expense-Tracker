@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Group Expense - Smart Expense Tracker{% endblock %}
+
+{% block header_title %}Add Group Expense{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <!-- Back Link -->
+        <div class="mb-3">
+            <a href="{% url 'group_detail' group.id %}" class="btn btn-sm btn-outline-secondary px-3 py-1.5 rounded-3 fw-semibold small d-inline-flex align-items-center gap-1.5">
+                <i class="bi bi-arrow-left"></i> Cancel and Go Back
+            </a>
+        </div>
+
+        <!-- Form Card -->
+        <div class="glass-card p-4">
+            <h5 class="fw-bold text-white mb-1"><i class="bi bi-receipt text-indigo me-2"></i> Record Group Expense</h5>
+            <p class="text-secondary small mb-4">Add a shared bill. The amount will be divided equally among chosen participants.</p>
+
+            <form method="POST" action="{% url 'group_expense_add' group.id %}">
+                {% csrf_token %}
+                
+                <!-- Title Field -->
+                <div class="mb-3">
+                    <label class="form-label small text-secondary">Expense Title</label>
+                    <input type="text" name="title" class="form-control" placeholder="e.g. Dinner, Uber ride, Utilities" required value="{{ form.title.value|default:'' }}">
+                    {% if form.title.errors %}
+                        <div class="text-danger small mt-1">{{ form.title.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="row g-3">
+                    <!-- Amount Field -->
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary">Total Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary border-opacity-25 text-secondary">₹</span>
+                                <input type="number" name="amount" step="0.01" min="0.01" class="form-control" placeholder="0.00" required value="{{ form.amount.value|default:'' }}">
+                            </div>
+                            {% if form.amount.errors %}
+                                <div class="text-danger small mt-1">{{ form.amount.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Date Field -->
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary">Date</label>
+                            <input type="date" name="date" class="form-control" required value="{{ form.date.value|date:'Y-m-d'|default:form.date.value }}">
+                            {% if form.date.errors %}
+                                <div class="text-danger small mt-1">{{ form.date.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paid By Field -->
+                <div class="mb-4">
+                    <label class="form-label small text-secondary">Who Paid?</label>
+                    <select name="paid_by" class="form-select text-white" required>
+                        {% for choice in form.paid_by.field.choices %}
+                            <option value="{{ choice.0 }}" {% if form.paid_by.value == choice.0 or choice.0 == request.user.id %}selected{% endif %}>{{ choice.1 }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if form.paid_by.errors %}
+                        <div class="text-danger small mt-1">{{ form.paid_by.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Split With (Premium Chip Selection) -->
+                <div class="mb-4">
+                    <label class="form-label small text-secondary d-block mb-2">Split Equally With</label>
+                    <div class="d-flex flex-wrap gap-2.5">
+                        {% for choice in form.split_with.field.choices %}
+                            {% if choice.0 %}
+                                <div class="split-checkbox-wrapper">
+                                    <input type="checkbox" name="split_with" value="{{ choice.0 }}" id="split_user_{{ choice.0 }}" checked class="d-none split-checkbox">
+                                    <label for="split_user_{{ choice.0 }}" class="btn btn-sm btn-outline-light rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-1.5 split-label">
+                                        <i class="bi bi-check-circle-fill text-success select-indicator"></i> 
+                                        <span>{{ choice.1 }}</span>
+                                    </label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% if form.split_with.errors %}
+                        <div class="text-danger small mt-1">{{ form.split_with.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Description Field -->
+                <div class="mb-4">
+                    <label class="form-label small text-secondary">Description (Optional)</label>
+                    <textarea name="description" class="form-control" rows="2" placeholder="Any additional notes...">{{ form.description.value|default:'' }}</textarea>
+                    {% if form.description.errors %}
+                        <div class="text-danger small mt-1">{{ form.description.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary-gradient w-100 py-2.5 rounded-3 fw-bold shadow">
+                    <i class="bi bi-check-lg me-1"></i> Save Shared Expense
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Custom Chip selection style for splitting */
+.split-label {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    background-color: rgba(255, 255, 255, 0.02);
+    color: #94a3b8;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.split-label:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.split-checkbox:checked + .split-label {
+    background-color: rgba(99, 102, 241, 0.15) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
+}
+.split-checkbox:not(:checked) + .split-label {
+    opacity: 0.55;
+}
+.split-checkbox:not(:checked) + .split-label .select-indicator {
+    display: none;
+}
+</style>
+{% endblock %}
