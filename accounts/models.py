@@ -12,6 +12,15 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Profile"
 
+    @property
+    def avatar_url(self):
+        try:
+            if self.avatar and self.avatar.name != 'avatars/default.png':
+                return self.avatar.url
+        except Exception:
+            pass
+        return f"https://ui-avatars.com/api/?name={self.user.username}&background=6366f1&color=fff&bold=true"
+
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -19,3 +28,5 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     else:
         if hasattr(instance, 'profile'):
             instance.profile.save()
+
+

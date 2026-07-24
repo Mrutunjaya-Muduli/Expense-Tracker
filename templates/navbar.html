@@ -21,13 +21,7 @@
 
             <div class="dropdown ms-1">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle gap-2" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    {% if user.profile.avatar %}
-                        <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="avatar-img" style="width:36px; height:36px;">
-                    {% else %}
-                        <div class="avatar-img bg-indigo-glow d-flex align-items-center justify-content-center fw-bold" style="width:36px; height:36px;">
-                            <i class="bi bi-person-fill"></i>
-                        </div>
-                    {% endif %}
+                    <img src="{{ user.profile.avatar_url }}" alt="{{ user.username }}" class="avatar-img" style="width:36px; height:36px;">
                     <span class="d-none d-lg-inline fw-semibold small">{{ user.username }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-secondary border-opacity-25" aria-labelledby="userDropdown">

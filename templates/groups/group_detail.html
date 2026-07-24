@@ -65,13 +65,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <!-- Debtor -->
                             <div class="d-flex flex-column align-items-center gap-1 flex-grow-1 text-center">
-                                {% if settlement.from_user.profile.avatar %}
-                                    <img src="{{ settlement.from_user.profile.avatar.url }}" alt="{{ settlement.from_user.username }}" class="rounded-circle border border-danger border-opacity-50" style="width: 32px; height: 32px; object-fit: cover;">
-                                {% else %}
-                                    <div class="rounded-circle bg-danger bg-opacity-15 text-danger d-flex align-items-center justify-content-center fw-bold text-uppercase" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                                        {{ settlement.from_user.username|slice:":2" }}
-                                    </div>
-                                {% endif %}
+                                <img src="{{ settlement.from_user.profile.avatar_url }}" alt="{{ settlement.from_user.username }}" class="rounded-circle border border-danger border-opacity-50" style="width: 32px; height: 32px; object-fit: cover;">
                                 <span class="small fw-semibold text-danger" style="font-size:0.75rem;">{{ settlement.from_user.username }}</span>
                             </div>
 
@@ -85,13 +79,7 @@
 
                             <!-- Creditor -->
                             <div class="d-flex flex-column align-items-center gap-1 flex-grow-1 text-center">
-                                {% if settlement.to_user.profile.avatar %}
-                                    <img src="{{ settlement.to_user.profile.avatar.url }}" alt="{{ settlement.to_user.username }}" class="rounded-circle border border-success border-opacity-50" style="width: 32px; height: 32px; object-fit: cover;">
-                                {% else %}
-                                    <div class="rounded-circle bg-success bg-opacity-15 text-success d-flex align-items-center justify-content-center fw-bold text-uppercase" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                                        {{ settlement.to_user.username|slice:":2" }}
-                                    </div>
-                                {% endif %}
+                                <img src="{{ settlement.to_user.profile.avatar_url }}" alt="{{ settlement.to_user.username }}" class="rounded-circle border border-success border-opacity-50" style="width: 32px; height: 32px; object-fit: cover;">
                                 <span class="small fw-semibold text-success" style="font-size:0.75rem;">{{ settlement.to_user.username }}</span>
                             </div>
                         </div>
@@ -131,13 +119,7 @@
                 {% for mb in member_balances %}
                     <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 bg-dark bg-opacity-30 border border-secondary border-opacity-10">
                         <div class="d-flex align-items-center gap-2.5">
-                            {% if mb.user.profile.avatar %}
-                                <img src="{{ mb.user.profile.avatar.url }}" alt="{{ mb.user.username }}" class="avatar-img" style="width:36px; height:36px;">
-                            {% else %}
-                                <div class="avatar-img bg-indigo-glow d-flex align-items-center justify-content-center fw-bold" style="width:36px; height:36px;">
-                                    <i class="bi bi-person-fill fs-5"></i>
-                                </div>
-                            {% endif %}
+                            <img src="{{ mb.user.profile.avatar_url }}" alt="{{ mb.user.username }}" class="avatar-img" style="width:36px; height:36px;">
                             <div>
                                 <div class="fw-bold text-white small">{{ mb.user.username }}</div>
                                 {% if mb.is_creditor %}
@@ -203,11 +185,7 @@
                                 <td class="fw-bold text-white small">{{ exp.title }}</td>
                                 <td>
                                     <span class="badge bg-dark bg-opacity-50 border border-secondary border-opacity-20 text-white px-2.5 py-1.5 rounded-pill d-inline-flex align-items-center gap-1.5 shadow-sm">
-                                        {% if exp.paid_by.profile.avatar %}
-                                            <img src="{{ exp.paid_by.profile.avatar.url }}" alt="{{ exp.paid_by.username }}" class="rounded-circle" style="width: 18px; height: 18px; object-fit: cover;">
-                                        {% else %}
-                                            <i class="bi bi-person-fill text-indigo" style="font-size: 0.8rem;"></i>
-                                        {% endif %}
+                                        <img src="{{ exp.paid_by.profile.avatar_url }}" alt="{{ exp.paid_by.username }}" class="rounded-circle" style="width: 18px; height: 18px; object-fit: cover;">
                                         <span style="font-size: 0.72rem; font-weight: 500;">{{ exp.paid_by.username }}</span>
                                     </span>
                                 </td>

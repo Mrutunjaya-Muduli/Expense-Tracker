@@ -7,13 +7,7 @@
     <div class="col-lg-4">
         <div class="glass-card p-4 text-center">
             <div class="position-relative d-inline-block mb-3">
-                {% if user.profile.avatar %}
-                    <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="rounded-circle border border-3 border-indigo shadow-lg" style="width: 120px; height: 120px; object-fit: cover;">
-                {% else %}
-                    <div class="rounded-circle bg-indigo-glow border border-3 border-indigo d-flex align-items-center justify-content-center mx-auto" style="width: 120px; height: 120px; font-size: 2.5rem;">
-                        {{ user.username|first|upper }}
-                    </div>
-                {% endif %}
+                <img src="{{ user.profile.avatar_url }}" alt="{{ user.username }}" class="rounded-circle border border-3 border-indigo shadow-lg" style="width: 120px; height: 120px; object-fit: cover;">
             </div>
             <h4 class="fw-bold text-white mb-1">{{ user.get_full_name|default:user.username }}</h4>
             <p class="text-secondary small mb-3">@{{ user.username }} | {{ user.email }}</p>
@@ -56,10 +50,7 @@
                         <label class="form-label text-secondary small fw-semibold">Currency Symbol</label>
                         {{ p_form.currency }}
                     </div>
-                    <div class="col-md-12">
-                        <label class="form-label text-secondary small fw-semibold">Profile Picture Avatar</label>
-                        {{ p_form.avatar }}
-                    </div>
+
                 </div>
 
                 <div class="d-flex justify-content-end gap-2">
