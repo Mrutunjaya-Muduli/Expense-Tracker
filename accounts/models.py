@@ -6,6 +6,7 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     avatar = models.ImageField(upload_to='avatars/', default='avatars/default.png', blank=True)
+    avatar_base64 = models.TextField(blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, default='')
     currency = models.CharField(max_length=10, default='₹')
 
@@ -14,6 +15,8 @@ class Profile(models.Model):
 
     @property
     def avatar_url(self):
+        if self.avatar_base64:
+            return self.avatar_base64
         try:
             if self.avatar and self.avatar.name != 'avatars/default.png':
                 return self.avatar.url

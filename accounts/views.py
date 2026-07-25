@@ -55,7 +55,22 @@ def profile_view(request):
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
-            p_form.save()
+            profile = p_form.save(commit=False)
+            
+            # Handle clear avatar
+            if p_form.cleaned_data.get('clear_avatar'):
+                profile.avatar_base64 = None
+                profile.avatar = 'avatars/default.png'
+            # Handle new avatar upload
+            elif p_form.cleaned_data.get('avatar'):
+                avatar_file = p_form.cleaned_data.get('avatar')
+                import base64
+                file_data = avatar_file.read()
+                encoded_string = base64.b64encode(file_data).decode('utf-8')
+                profile.avatar_base64 = f"data:{avatar_file.content_type};base64,{encoded_string}"
+                profile.avatar = 'avatars/default.png'
+                
+            profile.save()
             messages.success(request, "Your profile has been updated successfully!")
             return redirect('profile')
     else:

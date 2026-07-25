@@ -30,6 +30,16 @@ class UserUpdateForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 class ProfileUpdateForm(forms.ModelForm):
+    avatar = forms.ImageField(
+        required=False, 
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
+    )
+    clear_avatar = forms.BooleanField(
+        required=False, 
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        label="Remove profile photo"
+    )
+
     class Meta:
         model = Profile
         fields = ['phone', 'currency']
@@ -37,4 +47,12 @@ class ProfileUpdateForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'currency': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '₹ or $ or €'}),
         }
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get('avatar')
+        if avatar:
+            # Limit file size to 2MB
+            if avatar.size > 2 * 1024 * 1024:
+                raise forms.ValidationError("Image file too large. Max size is 2MB.")
+        return avatar
 

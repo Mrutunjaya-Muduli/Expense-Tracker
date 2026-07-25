@@ -50,7 +50,27 @@
                         <label class="form-label text-secondary small fw-semibold">Currency Symbol</label>
                         {{ p_form.currency }}
                     </div>
-
+                    <div class="col-md-12">
+                        <label class="form-label text-secondary small fw-semibold">Profile Picture Avatar</label>
+                        {{ p_form.avatar }}
+                        {% if p_form.avatar.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in p_form.avatar.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if user.profile.avatar_base64 %}
+                    <div class="col-md-12">
+                        <div class="form-check">
+                            {{ p_form.clear_avatar }}
+                            <label class="form-check-label text-secondary small fw-semibold" for="{{ p_form.clear_avatar.id_for_label }}">
+                                Remove current profile photo
+                            </label>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
 
                 <div class="d-flex justify-content-end gap-2">
